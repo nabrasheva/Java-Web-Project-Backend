@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,4 +18,7 @@ public class TaskDto {
     private String description;
     private LocalDate due_date;
     private Status status;
+    private String creator_username;
+    private Long event_id;
+    private List<String> assignees;
 }
