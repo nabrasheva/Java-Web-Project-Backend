@@ -1,48 +1,48 @@
 ---
 CREATE TABLE event_manager.Events (
    id  BIGSERIAL PRIMARY KEY,
-   name VARCHAR(255),
+   name VARCHAR(32),
    date DATE ,
-   location VARCHAR(255),
-   description VARCHAR(255),
-   --created_date TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-   --last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+   location VARCHAR(64),
+   description VARCHAR(128),
+   created_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+   last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
    version BIGINT
 );
 
 CREATE TABLE event_manager.Users (
      id  BIGSERIAL PRIMARY KEY,
-    username VARCHAR(255),
-    email VARCHAR(255),
+    username VARCHAR(32),
+    email VARCHAR(16),
     password VARCHAR(255),
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    first_name VARCHAR(32),
+    last_name VARCHAR(32),
     profile_picture_url VARCHAR(255),
-    --date_of_birth DATE,
-    address VARCHAR(255),
-    --created_date TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-    --last_modified_date TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+    date_of_birth DATE,
+    address VARCHAR(64),
+    created_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+    last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
     version BIGINT
 );
 
 CREATE TABLE event_manager.Tasks (
     id  BIGSERIAL PRIMARY KEY,
-   name VARCHAR(255),
-   description VARCHAR(255),
+   name VARCHAR(32),
+   description VARCHAR(128),
    due_date DATE,
-   status VARCHAR(255),
-   creator_username VARCHAR(255),
+   status VARCHAR(16),
+   creator_username VARCHAR(32),
    event_id BIGINT REFERENCES Events(id),
-   --created_date TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-   --last_modified_date TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+   created_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+   last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
    version BIGINT
 );
 
 ---
 CREATE TABLE event_manager.Event_User (
     id BIGSERIAL PRIMARY KEY,
-    role VARCHAR(255),
-    category VARCHAR(255),
+    role VARCHAR(16),
+    category VARCHAR(16),
     user_id BIGINT REFERENCES Users(id) ON DELETE CASCADE,
     event_id BIGINT REFERENCES Events(id) ON DELETE CASCADE
 );

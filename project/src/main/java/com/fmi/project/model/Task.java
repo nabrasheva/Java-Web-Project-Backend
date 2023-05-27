@@ -4,6 +4,8 @@ import com.fmi.project.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Set;
 
 
@@ -21,9 +23,8 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-   /* @Column(name="due_date")
-    @Temporal(TemporalType.DATE)
-    private Date due_date;*/
+    @Column(name="due_date")
+    private Date due_date;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -40,20 +41,15 @@ public class Task {
     )
     private Set<EventUser> assignees;
 
-   /* @Column(name="event")
-    private Set<EventUser> assignees;*/
-
     @ManyToOne
     @JoinColumn(name="event_id", nullable=false)
     private Event event;
 
-   /* @Column(name="created_date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="created_date")
     private Timestamp created_date;
 
     @Column(name="last_modified_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp last_modified_date;*/
+    private Timestamp last_modified_date;
 
     @Column(name = "version")
     @Version
