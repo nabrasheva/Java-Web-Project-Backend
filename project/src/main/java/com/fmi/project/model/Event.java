@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.util.Set;
 
 @Entity
-@Table(schema = "event_manager", name="Events")
+@Table(schema = "event_manager", name="events")
 @Getter
 public class Event {
     @Id

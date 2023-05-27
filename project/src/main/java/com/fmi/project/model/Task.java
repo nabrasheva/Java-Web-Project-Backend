@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(schema = "event_manager", name = "Tasks")
+@Table(schema = "event_manager", name = "tasks")
 @Getter
 public class Task {
     @Id
@@ -35,7 +35,7 @@ public class Task {
 
     @ManyToMany()
     @JoinTable(
-            name = "event_users_tasks",
+            name = "events_users_tasks",
             joinColumns = @JoinColumn(name = "event_user_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )

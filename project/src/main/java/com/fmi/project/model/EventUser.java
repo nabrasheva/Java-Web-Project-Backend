@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(schema = "event_manager", name = "EventUser")
+@Table(schema = "event_manager", name = "events_users")
 public class EventUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

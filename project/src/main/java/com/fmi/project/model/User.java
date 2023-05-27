@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(schema = "event_manager", name="Users")
+@Table(schema = "event_manager", name="users")
 @Getter
 public class User {
 
