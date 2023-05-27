@@ -2,23 +2,33 @@ package com.fmi.project.model;
 
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.*;
 
-//@Entity
-//@Table
-@Component
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+import java.util.Set;
+
+@Entity
+@Table(schema = "event_manager", name = "EventUser")
 public class EventUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
     private Category category;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
+
+    @ManyToMany(mappedBy = "assignees")
+    private Set<Task> tasks;
 }

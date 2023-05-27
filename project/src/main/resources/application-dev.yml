@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    username: postgres
+    password: admin123
+    url: jdbc:postgresql://localhost:5432/event_manager_db
+    hikari:
+      schema: event_manager
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+  flyway:
+    enabled: true
+    locations: /db.migrations
