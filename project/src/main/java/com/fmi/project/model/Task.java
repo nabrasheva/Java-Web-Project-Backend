@@ -8,10 +8,12 @@ import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.Set;
 
-
 @Entity
 @Table(schema = "event_manager", name = "tasks")
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +37,11 @@ public class Task {
 
     @ManyToMany()
     @JoinTable(
-            name = "events_users_tasks",
-            joinColumns = @JoinColumn(name = "event_user_id"),
+            name = "users_tasks",
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    private Set<EventUser> assignees;
+    private Set<User> assignees;
 
     @ManyToOne
     @JoinColumn(name="event_id", nullable=false)
