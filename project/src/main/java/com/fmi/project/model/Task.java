@@ -1,36 +1,57 @@
 package com.fmi.project.model;
 
 import com.fmi.project.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.*;
+import lombok.*;
 
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Set;
 
-//@Entity
-//@Table
-@Component
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
+@Entity
+@Table(schema = "event_manager", name = "tasks")
+@Getter
 public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
-    private LocalDate due_date;
+
+    @Column(name="due_date")
+    private Date due_date;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name = "creator_username")
     private String creator_username;
-    private Long event_id;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "events_users_tasks",
+            joinColumns = @JoinColumn(name = "event_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
     private Set<EventUser> assignees;
+
+    @ManyToOne
+    @JoinColumn(name="event_id", nullable=false)
     private Event event;
-    private LocalDateTime created_date;
-    private LocalDateTime last_modified_date;
-    private BigDecimal version;
+
+    @Column(name="created_date")
+    private Timestamp created_date;
+
+    @Column(name="last_modified_date")
+    private Timestamp last_modified_date;
+
+    @Column(name = "version")
+    @Version
+    private Long version;
 }
