@@ -3,11 +3,19 @@ package com.fmi.project.model;
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Entity
 @Table(schema = "event_manager", name = "events_users")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +29,13 @@ public class EventUser {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "event_id")
     private Event event;
 
-    @ManyToMany(mappedBy = "assignees")
-    private Set<Task> tasks;
+
 }
