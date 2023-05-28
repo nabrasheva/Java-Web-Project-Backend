@@ -3,16 +3,13 @@ package com.fmi.project.model;
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(schema = "event_manager", name = "events_users")
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

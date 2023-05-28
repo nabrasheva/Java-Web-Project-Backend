@@ -19,17 +19,17 @@ import java.util.stream.Collectors;
 public class EventController {
     private final TaskService taskService;
     private final EventService eventService;
-
-    @GetMapping("/tasks")
-    public List<String> getTasks() {
-        return taskService.test().stream().map(item -> item.getId() + " " + item.getName() + "\n")
-                .collect(Collectors.toList());
-    }
-
-    @PostMapping("/getEvents")
-    public List<String> getEvents(@RequestBody Role test) {
-        System.out.println(test);
-        return eventService.testEvents().stream().map(item -> item.getId() + " " + item.getName() + "\n")
-                .collect(Collectors.toList());
-    }
+//
+//    @GetMapping("/tasks")
+//    public List<String> getTasks() {
+//        return taskService.test().stream().map(item -> item.getId() + " " + item.getName() + "\n")
+//                .collect(Collectors.toList());
+//    }
+//
+//    @PostMapping("/getEvents")
+//    public List<String> getEvents(@RequestBody Role test) {
+//        System.out.println(test);
+//        return eventService.testEvents().stream().map(item -> item.getId() + " " + item.getName() + "\n")
+//                .collect(Collectors.toList());
+//    }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(schema = "event_manager", name = "tasks")
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,5 +57,5 @@ public class Task {
     @Version
     private Long version;
 
-    //TODO: override hashCode and equals!!!
+    // TODO: override hashCode and equals!!!
 }

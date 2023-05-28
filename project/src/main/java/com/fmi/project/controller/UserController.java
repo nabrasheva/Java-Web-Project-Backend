@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/")
-    public List<String> getTasks() {
-        return userService.testUsers().stream().map(item -> item.getId() + " " + item.getFirst_name() + "\n")
-                .collect(Collectors.toList());
-    }
+//    @GetMapping("/")
+//    public List<String> getTasks() {
+//        return userService.testUsers().stream().map(item -> item.getId() + " " + item.getFirst_name() + "\n")
+//                .collect(Collectors.toList());
+//    }
 }

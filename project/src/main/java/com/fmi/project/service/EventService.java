@@ -5,32 +5,30 @@ import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import com.fmi.project.model.Event;
 import com.fmi.project.model.EventUser;
+import com.fmi.project.model.Task;
 import com.fmi.project.model.User;
 import com.fmi.project.repository.EventRepository;
-import com.fmi.project.repository.EventUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
-    private final EventUserRepository eventUserRepository;
+    private final EventUserService eventUserService;
 
     private final UserService userService;
 
-//    public List<Event> testEvents() {
-//        final List<Event> test = eventRepository.findAll();
-//        return test;
-//    }
 
-    public List<Event> getEventsByRole(Role role) {
-        final List<EventUser> list = eventUserRepository.findAll().stream().filter(eventUser -> eventUser.getRole() == role).toList();
+    public List<Event> getEventsByRole(Role role, User user) {
+       final List<EventUser> list = eventUserService.getAllEventUsersByUserAndRole(user, role);
 
         final List<Event> eventList = new ArrayList<>();
         list.forEach(eventUser -> eventList.add(eventUser.getEvent()));
@@ -43,49 +41,40 @@ public class EventService {
             throw new IllegalArgumentException("Incorrect data");
         }
         List<Event> eventList = eventRepository.findAll();
-        User newEventCreator = userService.findUserByUsername(username);
+        User newEventCreator = userService.findUserByUsername(username).orElse(null);
 
+        if(newEventCreator == null) throw new ApiBadRequest("User do not exist!");
         eventList.forEach(event1 -> {
-            User eventCreator = eventUserRepository.findEventUserByEventAndRole(event1, Role.ADMIN).getUser();
+           User eventCreator = eventUserService.findEventUserByEventAndRole(event1, Role.ADMIN).getUser();
 
-            if (eventCreator.equals(newEventCreator) && event1.equals(event)) {
+            if (eventCreator.getId().equals(newEventCreator.getId()) && event1.equals(event)) { // TODO: make equals
                 throw new ApiBadRequest("Event already exists!");
             }
         });
 
         eventRepository.save(event);
-        EventUser newEventUser = new EventUser();
 
-        newEventUser.setEvent(event);
-        newEventUser.setUser(newEventCreator);
-        newEventUser.setRole(Role.ADMIN);
-        newEventUser.setCategory(Category.NONE);
-        newEventUser.setTasks(new HashSet<>());
-
-        eventUserRepository.save(newEventUser);
+        EventUser newEventUser = EventUser.builder()
+                                            .event(event)
+                                            .user(newEventCreator)
+                                            .role(Role.ADMIN)
+                                            .category(Category.NONE)
+                                            .build();
+        eventUserService.addEventUser(newEventUser);
     }
 
     public void deleteEvent(Event event) {
         if (event == null) {
             throw new IllegalArgumentException("Incorrect data");
         }
-
         try {
             eventRepository.delete(event);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
-
-        // TODO: CASCADE REMOVE FOR EVENT_USER!!!
-
-//        List<EventUser> eventUsers = eventUserRepository.findAll()
-//                .stream()
-//                .filter(eventUser -> eventUser.getEvent().equals(event))
-//                .toList();
-
     }
 
-    public void updateEvent(Long id, String description, String location, Date date)
+    public void updateEventById(Long id, String description, String location, Date date)
     {
         Event event = eventRepository.findById(id).orElse(null);
 
@@ -94,10 +83,33 @@ public class EventService {
             if(description != null) event.setDescription(description);
             if(location != null) event.setLocation(location);
             if(date != null) event.setDate(date);
+            event.setLast_modified_date(Timestamp.from(Instant.now()));
+            event.setVersion(event.getVersion()+1);
             eventRepository.save(event);
         }
         else throw new ApiBadRequest("Invalid event!");
     }
 
+    public Optional<Event> getEventById(Long id)
+    {
+        return eventRepository.findById(id);
+    }
 
+    public List<Task> getAllTasksByEvent(Event event)
+    {
+        Event event1 = eventRepository.findById(event.getId()).orElse(null);
+
+        if(event1 == null) throw new ApiBadRequest("Invalid event!");
+
+        return event1.getTasks().stream().toList();
+    }
+
+    public List<Task> getAllTasksByEventId(Long event_id)
+    {
+        Event event = eventRepository.findById(event_id).orElse(null);
+
+        if(event == null) throw new ApiBadRequest("Invalid event!");
+
+        return event.getTasks().stream().toList();
+    }
 }

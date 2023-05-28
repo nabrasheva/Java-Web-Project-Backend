@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.Set;
 
-@Getter
+@Data
 @Entity
 @Table(schema = "event_manager", name="events")
 @Builder
@@ -30,8 +30,11 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy="event")
+    @OneToMany(mappedBy="event", cascade = CascadeType.REMOVE)
     private Set<Task> tasks;
+
+    @OneToMany(mappedBy="event", cascade = CascadeType.REMOVE)
+    private Set<EventUser> eventUsers;
 
    @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)

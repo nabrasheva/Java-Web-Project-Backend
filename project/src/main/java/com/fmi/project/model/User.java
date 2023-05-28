@@ -1,10 +1,7 @@
 package com.fmi.project.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -12,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(schema = "event_manager", name="users")
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,7 +43,7 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(mappedBy = "id")
+    @ManyToMany(mappedBy = "id",  cascade = CascadeType.REMOVE)
     private Set<Task> tasks;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
