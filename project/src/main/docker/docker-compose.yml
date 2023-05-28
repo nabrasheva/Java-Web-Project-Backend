@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  event_manager:
+    image: postgres
+    container_name: event_manager
+    restart: always
+    environment:
+      POSTGRES_DB: event_manager_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
