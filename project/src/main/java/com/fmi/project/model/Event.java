@@ -7,10 +7,12 @@ import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.Set;
 
-@Entity
-@Data
-@Table(schema = "event_manager", name="events")
 @Getter
+@Entity
+@Table(schema = "event_manager", name="events")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -42,6 +44,4 @@ public class Event {
     @Column(name="version")
     @Version
     private Long version;
-
-    //TODO: override hashCode and equals!!!
 }
