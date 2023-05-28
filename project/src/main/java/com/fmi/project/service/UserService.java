@@ -18,9 +18,15 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+//
+//    public List<User> testUsers() {
+//        final List<User> test = userRepository.findAll();
+//        return test;
+//    }
 
-    public List<User> testUsers() {
-        final List<User> test = userRepository.findAll();
-        return test;
+
+    public User findUserByUsername(String username)
+    {
+        return userRepository.findUserByUsername(username);
     }
 }

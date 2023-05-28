@@ -54,4 +54,6 @@ public class Task {
     @Column(name = "version")
     @Version
     private Long version;
+
+    //TODO: override hashCode and equals!!!
 }

@@ -3,10 +3,16 @@ package com.fmi.project.model;
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(schema = "event_manager", name = "events_users")
 public class EventUser {
     @Id

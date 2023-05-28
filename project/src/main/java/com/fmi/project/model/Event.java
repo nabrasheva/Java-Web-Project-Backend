@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.Set;
 
 @Entity
+@Data
 @Table(schema = "event_manager", name="events")
 @Getter
 public class Event {
@@ -41,4 +42,6 @@ public class Event {
     @Column(name="version")
     @Version
     private Long version;
+
+    //TODO: override hashCode and equals!!!
 }
