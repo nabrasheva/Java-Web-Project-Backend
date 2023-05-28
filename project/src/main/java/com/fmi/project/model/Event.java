@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @Table(schema = "event_manager", name="events")
 @Builder
@@ -30,7 +31,7 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy="event", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private Set<Task> tasks;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
