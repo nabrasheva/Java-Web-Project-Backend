@@ -1,8 +1,8 @@
 ---
 CREATE TABLE event_manager.events (
    id  BIGSERIAL PRIMARY KEY,
-   name VARCHAR(32),
-   date DATE ,
+   name VARCHAR(32) NOT NULL,
+   date DATE NOT NULL,
    location VARCHAR(64),
    description VARCHAR(128),
    created_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,

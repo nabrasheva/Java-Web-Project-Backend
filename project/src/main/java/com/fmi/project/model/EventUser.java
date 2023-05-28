@@ -21,11 +21,11 @@ public class EventUser {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
 
