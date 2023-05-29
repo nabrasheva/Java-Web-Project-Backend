@@ -19,6 +19,10 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final EventService eventService;
 
+    /*
+
+     */
+
     public void addTask(Event event, Task task)
     {
         if(event == null || eventService.getEventById(event.getId()).orElse(null) == null )

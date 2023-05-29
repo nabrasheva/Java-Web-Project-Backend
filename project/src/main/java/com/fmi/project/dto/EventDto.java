@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Data
 @Builder
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class EventDto {
     private String name;
-    private LocalDateTime date;
+    private Date date;
     private String location;
     private String description;
 }

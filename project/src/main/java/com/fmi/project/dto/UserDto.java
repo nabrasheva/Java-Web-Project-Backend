@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Data
@@ -20,6 +21,6 @@ public class UserDto {
     private String first_name;
     private String last_name;
     private String profile_picture_url;
-    private LocalDate date_of_birth;
+    private Date date_of_birth;
     private String address;
 }
