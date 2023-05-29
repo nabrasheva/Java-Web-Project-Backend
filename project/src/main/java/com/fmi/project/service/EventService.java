@@ -12,11 +12,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 @Service
 @AllArgsConstructor
@@ -81,11 +81,12 @@ public class EventService {
     {
         Event event = eventRepository.findById(id).orElse(null);
 
-        if (event != null)
+        if (nonNull(event))
         {
-            if(description != null) event.setDescription(description);
-            if(location != null) event.setLocation(location);
-            if(date != null) event.setDate(date);
+            if(nonNull(description)) event.setDescription(description);
+            if(nonNull(location)) event.setLocation(location);
+            if(nonNull(date)) event.setDate(date);
+
             eventRepository.save(event);
         }
         else throw new ApiBadRequest("Invalid event!");
@@ -96,21 +97,13 @@ public class EventService {
         return eventRepository.findById(id);
     }
 
-    public List<Task> getAllTasksByEvent(Event event)
+    public List<Task> getAllTasksByEvent(long eventId)
     {
-        Event event1 = eventRepository.findById(event.getId()).orElse(null);
+        Event event1 = eventRepository.findById(eventId).orElse(null);
 
         if(event1 == null) throw new ApiBadRequest("Invalid event!");
 
         return event1.getTasks().stream().toList();
     }
 
-    public List<Task> getAllTasksByEventId(Long event_id)
-    {
-        Event event = eventRepository.findById(event_id).orElse(null);
-
-        if(event == null) throw new ApiBadRequest("Invalid event!");
-
-        return event.getTasks().stream().toList();
-    }
 }

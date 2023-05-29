@@ -8,9 +8,9 @@ import com.fmi.project.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.util.List;
 
 
 @Service
@@ -22,11 +22,16 @@ public class TaskService {
     /*
 
      */
+    public List<Task> getAllTasksByEventId(Event event) {
+              return taskRepository.findAllByEvent(event);
+    }
 
-    public void addTask(Event event, Task task)
-    {
-        if(event == null || eventService.getEventById(event.getId()).orElse(null) == null )
-        {
+    public Task findByTaskId(long taskId) {
+        return taskRepository.findById(taskId).orElseThrow(InvalidParameterException::new);
+    }
+
+    public void addTask(Event event, Task task) {
+        if (event == null || eventService.getEventById(event.getId()).orElse(null) == null) {
             throw new ApiBadRequest("Invalid event");
         }
 

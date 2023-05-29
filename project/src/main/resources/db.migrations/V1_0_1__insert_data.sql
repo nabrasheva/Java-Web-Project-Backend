@@ -1,4 +1,4 @@
-insert into event_manager.events (id, name, date, location, description, created_date, last_modified_date) values (1, 'Wedding', '2023-05-27', 'Sofia', 'Wedding preparation', '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
+insert into event_manager.events (id, name, date, location, description, created_date, last_modified_date) values (1, 'Wedding', '2023-06-05', 'Sofia', 'Wedding preparation', '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events (id, name, date, location, description, created_date, last_modified_date) values (2, 'Birthday party', '2023-05-31', 'Pirdop', null, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events (id, name, date, location, description, created_date, last_modified_date) values (3, 'Graduation', '2024-06-12', 'Sofia', 'Finally', '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 
@@ -11,7 +11,7 @@ insert into event_manager.tasks (id, name, description, due_date, status, creato
 insert into event_manager.tasks (id, name, description, due_date, status, creator_username, created_date, last_modified_date, event_id) values (3, 'Order party cake', null, '2023-06-14', 'TO_DO', 'Georgi', '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000', 2);
 insert into event_manager.tasks (id, name, description, due_date, status, creator_username, created_date, last_modified_date, event_id) values (4, 'Buy dress', null, '2023-06-22', 'TO_DO', 'Tsvetina', '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000', 3);
 
-insert into event_manager.events_users (id, role, category, user_id, event_id, created_date, last_modified_date) values (1, 'PLANNER', '', 1, 1, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
+insert into event_manager.events_users (id, role, category, user_id, event_id, created_date, last_modified_date) values (1, 'PLANNER', null, 1, 1, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events_users (id, role, category, user_id, event_id, created_date, last_modified_date) values (4, 'PLANNER', null, 2, 2, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events_users (id, role, category, user_id, event_id, created_date, last_modified_date) values (5, 'PLANNER', null, 3, 3, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events_users (id, role, category, user_id, event_id, created_date, last_modified_date) values (6, 'ADMIN', null, 3, 1, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
