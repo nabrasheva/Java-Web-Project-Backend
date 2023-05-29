@@ -44,7 +44,7 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(mappedBy = "assignees")
+    @ManyToMany(mappedBy = "assignees") // TODO: cascade????
     private Set<Task> tasks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
