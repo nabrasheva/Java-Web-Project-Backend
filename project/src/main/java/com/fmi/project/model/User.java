@@ -1,27 +1,32 @@
 package com.fmi.project.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
-@Table(schema = "event_manager", name="users")
+@Table(schema = "event_manager", name = "users")
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "first_name")
@@ -39,13 +44,19 @@ public class User {
     @Column(name = "address")
     private String address;
 
-   @Column(name = "created_date")
+    @ManyToMany(mappedBy = "assignees") // TODO: cascade????
+    private Set<Task> tasks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<EventUser> eventUsers;
+
+    @Column(name = "created_date", nullable = false)
     private Timestamp created_date;
 
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date", nullable = false)
     private Timestamp last_modified_date;
 
-    @Column(name="version")
+    @Column(name = "version", nullable = false)
     @Version
     private Long version;
 }
