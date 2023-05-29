@@ -7,7 +7,8 @@ import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(schema = "event_manager", name="events")
 @Builder
@@ -30,13 +31,13 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy="event", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private Set<Task> tasks;
 
-    @OneToMany(mappedBy="event", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private Set<EventUser> eventUsers;
 
-   @Column(name = "created_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp created_date;
 
@@ -47,4 +48,5 @@ public class Event {
     @Column(name="version")
     @Version
     private Long version;
+
 }
