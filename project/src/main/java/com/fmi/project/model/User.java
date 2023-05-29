@@ -1,10 +1,7 @@
 package com.fmi.project.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -47,7 +44,7 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(mappedBy = "assignees")
+    @ManyToMany(mappedBy = "assignees") // TODO: cascade????
     private Set<Task> tasks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

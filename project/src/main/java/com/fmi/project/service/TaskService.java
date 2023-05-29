@@ -24,7 +24,6 @@ public class TaskService {
         if(event == null || eventService.getEventById(event.getId()).orElse(null) == null )
         {
             throw new ApiBadRequest("Invalid event");
-
         }
 
         event.getTasks().add(task);

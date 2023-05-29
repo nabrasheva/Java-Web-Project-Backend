@@ -27,7 +27,7 @@ public class EventService {
     private final UserService userService;
 
 
-    public List<Event> getEventsByRole(Role role, User user) {
+    public List<Event> getEventsByRoleAndUser(Role role, User user) {
        final List<EventUser> list = eventUserService.getAllEventUsersByUserAndRole(user, role);
 
         final List<Event> eventList = new ArrayList<>();
@@ -45,7 +45,10 @@ public class EventService {
 
         if(newEventCreator == null) throw new ApiBadRequest("User do not exist!");
         eventList.forEach(event1 -> {
-           User eventCreator = eventUserService.findEventUserByEventAndRole(event1, Role.ADMIN).getUser();
+
+           EventUser eventUserForCreator = eventUserService.findFirstByEventAndRole(event1, Role.ADMIN).orElse(null);
+           if(eventUserForCreator == null) throw new ApiBadRequest("EventUser row does not exist!"); //ToDo: make better exception
+           User eventCreator = eventUserForCreator.getUser();
 
             if (eventCreator.getId().equals(newEventCreator.getId()) && event1.equals(event)) { // TODO: make equals
                 throw new ApiBadRequest("Event already exists!");
