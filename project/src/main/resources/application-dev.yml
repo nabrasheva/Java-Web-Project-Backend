@@ -3,9 +3,18 @@ spring:
     url: jdbc:postgresql://localhost:5432/event_manager_db
     username: postgres
     password: admin123
+    hikari:
+      schema: event_manager
   jpa:
     hibernate:
       ddl-auto: validate
   sql:
     init:
       mode: always
+  flyway:
+    enabled: true
+    locations: /db.migrations
+
+server:
+  port: 8079
+

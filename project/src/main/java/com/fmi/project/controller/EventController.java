@@ -32,13 +32,13 @@ public class EventController {
         return eventService.testEvents().stream().map(item -> item.getId() + " " + item.getName() + "\n")
                 .collect(Collectors.toList());
     }
-    private final EventService eventService;
-    //private final
+//    private final EventService eventService;
+//    //private final
 
-    @Autowired
-    public EventController(EventService eventService){
-        this.eventService = eventService;
-    }
+//    @Autowired
+//    public EventController(EventService eventService){
+//        this.eventService = eventService;
+//    }
 
 //    @GetMapping
 //    public List<Event> getEvents(){
