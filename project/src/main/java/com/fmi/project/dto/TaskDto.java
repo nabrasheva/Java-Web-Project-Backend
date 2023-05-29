@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class TaskDto {
     private String name;
     private String description;
-    private LocalDate due_date;
+    private Date due_date;
     private Status status;
     private String creator_username;
     private Long event_id;
