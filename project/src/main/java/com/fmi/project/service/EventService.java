@@ -86,8 +86,6 @@ public class EventService {
             if(description != null) event.setDescription(description);
             if(location != null) event.setLocation(location);
             if(date != null) event.setDate(date);
-            event.setLast_modified_date(Timestamp.from(Instant.now()));
-            event.setVersion(event.getVersion()+1);
             eventRepository.save(event);
         }
         else throw new ApiBadRequest("Invalid event!");

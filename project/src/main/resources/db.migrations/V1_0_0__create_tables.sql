@@ -6,8 +6,7 @@ CREATE TABLE event_manager.events
     location           VARCHAR(64),
     description        VARCHAR(128),
     created_date       TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
-    last_modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
-    version            BIGINT NOT NULL
+    last_modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE
 );
 
 
@@ -15,7 +14,7 @@ CREATE TABLE event_manager.users
 (
     id                  BIGSERIAL PRIMARY KEY NOT NULL,
     username            VARCHAR(32)           NOT NULL,
-    email               VARCHAR(16)           NOT NULL,
+    email               VARCHAR(64)           NOT NULL,
     password            VARCHAR(255)          NOT NULL,
     first_name          VARCHAR(32),
     last_name           VARCHAR(32),
@@ -23,8 +22,7 @@ CREATE TABLE event_manager.users
     date_of_birth       DATE,
     address             VARCHAR(64),
     created_date        TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
-    last_modified_date  TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
-    version             BIGINT                NOT NULL
+    last_modified_date  TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE
 );
 
 
@@ -38,7 +36,6 @@ CREATE TABLE event_manager.tasks
     creator_username   VARCHAR(32) NOT NULL,
     created_date       TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
     last_modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
-    version            BIGINT      NOT NULL,
     event_id           BIGINT      NOT NULL,
     FOREIGN KEY (event_id) REFERENCES event_manager.events (id) ON DELETE CASCADE
 );
@@ -50,8 +47,10 @@ CREATE TABLE event_manager.events_users
     category VARCHAR(255),
     user_id  BIGINT NOT NULL,
     event_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES event_manager.users (id),
-    FOREIGN KEY (event_id) REFERENCES event_manager.events (id)
+    created_date        TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
+    last_modified_date  TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
+    FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES event_manager.events (id) ON DELETE CASCADE
 );
 
 CREATE TABLE event_manager.users_tasks
@@ -59,8 +58,8 @@ CREATE TABLE event_manager.users_tasks
     task_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     PRIMARY KEY (task_id, user_id),
-    FOREIGN KEY (task_id) REFERENCES event_manager.tasks (id) ON UPDATE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON UPDATE CASCADE
+    FOREIGN KEY (task_id) REFERENCES event_manager.tasks (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON DELETE CASCADE
 
 );
 

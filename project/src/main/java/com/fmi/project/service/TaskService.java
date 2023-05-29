@@ -61,8 +61,6 @@ public class TaskService {
             if(description != null) task.setDescription(description);
             if(due_date != null) task.setDue_date(due_date);
             if(status != null) task.setStatus(status);
-            task.setLast_modified_date(Timestamp.from(Instant.now()));
-            task.setVersion(task.getVersion()+1);
             taskRepository.save(task);
         }
     }
