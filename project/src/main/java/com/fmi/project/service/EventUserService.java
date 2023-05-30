@@ -24,10 +24,14 @@ public class EventUserService {
         return eventUserRepository.findEventUserByUserAndRole(user, role);
     }
 
-    public Optional<EventUser> findFirstByEventAndRole(Event event, Role role) //when we want to find the ADMIN
+    public Optional<EventUser> findFirstByEventAndRoleAdmin(Event event) //when we want to find the ADMIN
     {
-        if(role != Role.ADMIN) throw new ApiBadRequest("Invalid role!");
-        return eventUserRepository.findFirstByEventAndRole(event, role);
+        return eventUserRepository.findFirstByEventAndRole(event, Role.ADMIN);
+    }
+
+    public Optional<EventUser> findFirstByEventAndRoleForAssignee(Event event, User user)
+    {
+        return eventUserRepository.findFirstByEventAndUserAndRole(event, user, Role.PLANNER);
     }
     public List<EventUser> findEventUserByEventAndRole(Event event, Role role)
     {
@@ -37,5 +41,9 @@ public class EventUserService {
     public void addEventUser(EventUser eventUser)
     {
         eventUserRepository.save(eventUser);
+    }
+
+    public Optional<EventUser> findFirstByEventAndUser(Event event, User user) {
+        return eventUserRepository.findFirstByEventAndUser(event, user);
     }
 }
