@@ -31,9 +31,6 @@ public class UserMapper {
                 .profile_picture_url(userDto.getProfile_picture_url())
                 .date_of_birth(userDto.getDate_of_birth())
                 .address(userDto.getAddress())
-                .created_date(Timestamp.from(Instant.now()))
-                .last_modified_date(Timestamp.from(Instant.now()))
-                .version(1L)
                 .build();
     }
 }

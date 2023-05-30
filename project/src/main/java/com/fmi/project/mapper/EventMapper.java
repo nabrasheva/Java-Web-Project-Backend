@@ -28,9 +28,6 @@ public class EventMapper {
                 .date(eventDto.getDate())
                 .location(eventDto.getLocation())
                 .description(eventDto.getDescription())
-                .created_date(Timestamp.from(Instant.now()))
-                .last_modified_date(Timestamp.from(Instant.now()))
-                .version(1L)
                 .build();
     }
 

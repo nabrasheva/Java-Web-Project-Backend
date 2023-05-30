@@ -3,24 +3,19 @@ package com.fmi.project.controller;
 import com.fmi.project.controller.validation.ApiBadRequest;
 import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
-import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
 import com.fmi.project.mapper.TaskMapper;
 import com.fmi.project.model.Event;
 import com.fmi.project.model.Task;
-import com.fmi.project.model.User;
 import com.fmi.project.service.EventService;
 import com.fmi.project.service.TaskService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -108,8 +103,24 @@ public class EventController {
 
     @GetMapping("/{eventId}/tasks")
     public List<TaskDto> getAllTasks(@PathVariable(name = "eventId") Long eventId){
-        List<Task> tasks = eventService.getAllTasksByEventId(eventId);
+        final Event event = eventService.getEventById(eventId).orElseThrow();
+        List<Task> tasks = taskService.getAllTasksByEventId(event);
         return taskMapper.toDtoCollection(tasks);
+    }
+
+
+    @DeleteMapping("{event_id}/tasks/{id}") //EventDto
+    public ResponseEntity<String> deleteTask(@PathVariable(value = "event_id") Long eventId,
+                                             @PathVariable(value = "id") Long taskId) {
+        final Event event = eventService.getEventById(eventId).orElse(null);
+
+        if (event == null) {
+            throw new ApiBadRequest("There is no such event or task");
+        }
+
+        taskService.removeTask(event, taskId);
+        //TODO: to output a message, not DTO object
+        return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 
 //    @GetMapping("/{eventId}/{taskId}")

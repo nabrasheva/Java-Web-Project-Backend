@@ -4,6 +4,10 @@ import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(schema = "event_manager", name = "events_users")
@@ -15,6 +19,7 @@ import lombok.*;
 public class EventUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(insertable = false, updatable = false, name = "id")
     private Long id;
 
     @Column(name = "role", nullable = false)
@@ -33,5 +38,11 @@ public class EventUser {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @Column(name = "created_date", nullable = false)
+    @CreationTimestamp
+    private Timestamp created_date;
 
+    @Column(name = "last_modified_date", nullable = false)
+    @UpdateTimestamp
+    private Timestamp last_modified_date;
 }

@@ -50,9 +50,6 @@ public class TaskMapper {
                                 .flatMap(Optional::stream)
                                 .collect(Collectors.toSet()))
                 .event(eventService.getEventById(taskDto.getEvent_id()).orElse(Event.builder().build()))
-                .created_date(Timestamp.from(Instant.now()))
-                .last_modified_date(Timestamp.from(Instant.now()))
-                .version(1L)
                 .build();
     }
 
