@@ -46,11 +46,11 @@ public class EventService {
         if(newEventCreator == null) throw new ApiBadRequest("User do not exist!");
         eventList.forEach(event1 -> {
 
-           EventUser eventUserForCreator = eventUserService.findFirstByEventAndRole(event1, Role.ADMIN).orElse(null);
-           if(eventUserForCreator == null) throw new ApiBadRequest("EventUser row does not exist!"); //ToDo: make better exception
+           EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1).orElse(null);
+           if(eventUserForCreator == null) throw new ApiBadRequest("EventUser row does not exist!");
            User eventCreator = eventUserForCreator.getUser();
 
-            if (eventCreator.getId().equals(newEventCreator.getId()) && event1.equals(event)) { // TODO: make equals
+            if (eventCreator.getId().equals(newEventCreator.getId()) && event.getName().equals(event1.getName())) {
                 throw new ApiBadRequest("Event already exists!");
             }
         });
@@ -97,7 +97,7 @@ public class EventService {
         return eventRepository.findById(id);
     }
 
-    public List<Task> getAllTasksByEvent(long eventId)
+    public List<Task> getAllTasksByEvent(Long eventId)
     {
         Event event1 = eventRepository.findById(eventId).orElse(null);
 
@@ -105,5 +105,40 @@ public class EventService {
 
         return event1.getTasks().stream().toList();
     }
+
+    public void addUserToEvent(Long event_id, String username, Role role, Category category)
+    {
+        Event event = eventRepository.findById(event_id).orElse(null);
+        User user = userService.findUserByUsername(username).orElse(null);
+        if(nonNull(event) && nonNull(user))
+        {
+            EventUser eventUser = eventUserService.findFirstByEventAndUser(event, user).orElse(null);
+            if(nonNull(eventUser)) throw new ApiBadRequest("User is already added to event!");
+            EventUser createdEventUser;
+            if(role == Role.GUEST)
+            {
+                createdEventUser = EventUser.builder()
+                                                    .event(event)
+                                                    .role(Role.GUEST)
+                                                    .category(category)
+                                                    .user(user)
+                                                    .build();
+            }
+            else {
+                createdEventUser = EventUser.builder()
+                                                    .event(event)
+                                                    .role(role)
+                                                    .user(user)
+                                                    .build();
+            }
+
+            eventUserService.addEventUser(createdEventUser);
+            event.getEventUsers().add(createdEventUser);
+            eventRepository.save(event);
+
+        }
+    }
+
+    //TODO: remove user from event!
 
 }

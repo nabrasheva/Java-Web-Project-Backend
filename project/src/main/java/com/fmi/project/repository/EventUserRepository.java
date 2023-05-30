@@ -14,8 +14,12 @@ import java.util.Optional;
 public interface EventUserRepository extends JpaRepository<EventUser, Long> {
     Optional<EventUser> findFirstByEventAndRole(final Event event, final Role role);
 
+    Optional<EventUser> findFirstByEventAndUserAndRole(final Event event, final User user, final Role role);
+
     List<EventUser> findEventUserByUserAndRole(final User user, final Role role);
 
     List<EventUser> findEventUserByEventAndRole(final Event event, final Role role);
+
+    Optional<EventUser> findFirstByEventAndUser(Event event, User user);
 
 }

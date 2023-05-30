@@ -62,6 +62,18 @@ public class EventController {
     //    //return eventService.addEvent(eventMapper.toEntity(eventDto));
     //}
 
+    @PostMapping("/newEvent") //EventDto
+    public ResponseEntity<String> addEvent(@RequestBody EventDto eventDto){
+        // TODO:in this case I also have to get the User data from the session in order to get his username and to use it as a parameter in the addEvent function
+        //User user = userService.findUserByUsername("Niya123").orElse(null);
+
+        Event newEvent = eventMapper.toEntity(eventDto);
+        //...
+        eventService.addEvent(newEvent, "Tsvetina");
+
+        return new ResponseEntity<String>("Successfully added", HttpStatus.OK);
+    }
+
     @GetMapping("/{eventId}")
     public EventDto getEventById(@PathVariable(value = "eventId") Long eventId){
         Event event = eventService.getEventById(eventId).orElse(null);
