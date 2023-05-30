@@ -96,7 +96,22 @@ public class EventService {
     {
         return eventRepository.findById(id);
     }
+    //........................................................................
+    public Task getTaskByEventIdAndTaskId(Long eventId, Long taskId){
+        Event event1 = eventRepository.findById(eventId).orElse(null);
 
+        if(event1 == null) throw new ApiBadRequest("Invalid event!");
+
+        Task task1 = event1.getTasks().stream()
+                                        .filter(task -> task.getId() == taskId)
+                                        .findFirst()
+                                        .orElse(null);
+
+        if(task1 == null) throw new ApiBadRequest("Invalid task for this event");
+
+        return task1;
+    }
+    //.........................................................................
     public List<Task> getAllTasksByEvent(Long eventId)
     {
         Event event1 = eventRepository.findById(eventId).orElse(null);

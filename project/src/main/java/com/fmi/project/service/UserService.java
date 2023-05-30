@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public void updateUserById(Long user_id, String email, String first_name, String last_name, String picture_url, Date dob, String address)
-    {
+    { //can we add also the password and confirm password field, because I think that a user will change often his password
         User user = userRepository.findById(user_id).orElse(null);
         if(user == null)
             throw new ApiBadRequest("Invalid user!");
