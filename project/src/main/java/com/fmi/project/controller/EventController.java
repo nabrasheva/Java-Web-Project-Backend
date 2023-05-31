@@ -1,8 +1,10 @@
 package com.fmi.project.controller;
 
 import com.fmi.project.controller.validation.ApiBadRequest;
+import com.fmi.project.dto.AddUserToEventDto;
 import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
+import com.fmi.project.dto.UserDto;
 import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
 import com.fmi.project.mapper.TaskMapper;
@@ -23,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -38,17 +42,11 @@ public class EventController {
     private final TaskMapper taskMapper;
 
     private final UserService userService;
-    private final UserMapper userMapper;
-//
-    //private final EventUserService eventUserService;
-    //private final EventUserMapper eventUserMapper;
 
-    //TODO: @GetMapping to output the user's tasks!
+    //TODO: @GetMapping to output tasks from user with username
 
-    //TODO: @PostMapping to add a user to event with eventId
     //TODO: @DeleteMapping to remove a user from event eventId
 
-    //TODO: @PostMapping to add an assignee to task with taskId
     //TODO: @DeleteMapping to remove an assignee from task with taskId
 
     /**
@@ -76,7 +74,7 @@ public class EventController {
         return eventMapper.toDtoCollection(allEvents);
     }
 
-    /*@GetMapping("/{username}/tasks")
+    @GetMapping("/{username}/tasks")
     public List<TaskDto> getAllTasksByUsername(@PathVariable(name = "username")String username){
         User user = userService.findUserByUsername(username).orElse(null);
 
@@ -84,22 +82,26 @@ public class EventController {
             throw new ApiBadRequest("There is no such user");
         }
 
-        List<Event> userAdminEvents = eventService.getEventsByRoleAndUser(Role.ADMIN, user);
+//        List<Task> assignedTasks = taskService.getTasksByAssignee(user);
+        List<Task> adminTasks = taskService.getTasksByAdmin(username);
+
+//        List<Task> allTasks = Stream.concat(assignedTasks.stream(), adminTasks.stream())
+//                .distinct()
+//                .collect(Collectors.toList());
+
         List<Event> userPlannerEvents = eventService.getEventsByRoleAndUser(Role.PLANNER, user);
-        List<Event> userGuestEvents = eventService.getEventsByRoleAndUser(Role.GUEST, user);
+        List<Task> assignedTasks = userPlannerEvents.stream()
+                                    .flatMap(event -> event.getTasks().stream())
+                                    .filter(task -> task.getAssignees().contains(user))
+                                    .distinct()
+                                    .toList();
 
-        List<Event> allEvents = new ArrayList<>();
-        allEvents.addAll(userAdminEvents);
-        allEvents.addAll(userPlannerEvents);
-        allEvents.addAll(userGuestEvents);
-
-        List<Task> allTasks = allEvents.stream()
-                .flatMap(event -> event.getTasks().stream())
-                .filter(task -> task.getAssignees().contains(user) ||
-                        task.getCreator_username().equals(username)).toList();
+        List<Task> allTasks = new ArrayList<>();
+        allTasks.addAll(adminTasks);
+        allTasks.addAll(assignedTasks);
 
         return taskMapper.toDtoCollection(allTasks);
-    }*/
+    }
 
     /**
      *   @param  eventId
@@ -201,6 +203,52 @@ public class EventController {
         taskService.addTask(event, newTask);
 
         return new ResponseEntity<String>("Successfully added task", HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @param eventId
+     * @param addUserToEventDto
+     * @return response with message for successfully added user to event with eventId
+     */
+    @PostMapping("/event/{eventId}/newUser")
+    public ResponseEntity<String> addUserToEvent(@PathVariable(name = "eventId") Long eventId,
+                                                 @RequestBody AddUserToEventDto addUserToEventDto){
+
+        Event event = eventService.getEventById(eventId).orElse(null);
+
+        if(event == null){
+            throw new ApiBadRequest("There is no such event");
+        }
+
+        eventService.addUserToEvent(eventId, addUserToEventDto.getUsername(),
+                                    addUserToEventDto.getRole(), addUserToEventDto.getCategory());
+
+        return new ResponseEntity<String>("Successfully added user to event", HttpStatus.OK);
+    }
+
+    /**
+     *
+     * @param eventId
+     * @param taskId
+     * @return response with message for successfully added asignee to task with taskId
+     */
+    @PostMapping("/event/{eventId}/tasks/{taskId}/newAssignee")
+    public ResponseEntity<String> addAssigneeToTask(@PathVariable(name = "eventId") Long eventId,
+                                                    @PathVariable(name = "taskId") Long taskId,
+                                                    @RequestBody Map<String, String> json){
+
+        Event event = eventService.getEventById(eventId).orElse(null);
+
+        if(event == null){
+            throw new ApiBadRequest("There is no such event");
+        }
+
+        Task task = eventService.getTaskByEventIdAndTaskId(eventId, taskId);
+
+        taskService.addAssigneeForTask(taskId, json.get("username"));
+
+        return new ResponseEntity<String>("Successfully added assignee to task", HttpStatus.OK);
     }
 
     /**

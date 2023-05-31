@@ -14,6 +14,7 @@ import java.security.InvalidParameterException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -79,7 +80,7 @@ public class TaskService {
         else throw new ApiBadRequest("Invalid task!");
     }
     //......................................................
-    /*public boolean checkAsigneeByTaskId(Long task_id, User user){
+    public boolean checkAssigneeByTaskId(Long task_id, User user){
         Task task = taskRepository.findById(task_id).orElse(null);
 
         if(task == null)
@@ -88,8 +89,8 @@ public class TaskService {
         }
 
         return task.getAssignees().stream()
-                    .anyMatch(username -> username.equals(user.getUsername()));
-    }*/
+                    .anyMatch(assignee -> assignee.getUsername().equals(user.getUsername()));
+    }
 
     public List<String> getAssigneesByTaskId(Long task_id){
         Task task = taskRepository.findById(task_id).orElse(null);
@@ -103,6 +104,15 @@ public class TaskService {
                 .map(User::getUsername)
                 .collect(Collectors.toList());
     }
+
+//    public List<Task> getTasksByAssignee(User user) {
+//        Set<User> assignees =
+//        return taskRepository.findByAssignees(user);
+//    }
+
+    public List<Task> getTasksByAdmin(String username) {
+        return taskRepository.findByCreatorUsername(username);
+    }
     //........................................................
     public void addAssigneeForTask(Long task_id, String username)
     {
@@ -113,6 +123,10 @@ public class TaskService {
             EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
             if(nonNull(eventUser))
             {
+                if(task.getAssignees().contains(user)){
+                    throw new ApiBadRequest("User is already assigned to task");
+                }
+
                 task.getAssignees().add(user);
                 taskRepository.save(task);
             }
