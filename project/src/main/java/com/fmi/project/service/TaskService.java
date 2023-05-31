@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.security.InvalidParameterException;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -29,11 +32,14 @@ public class TaskService {
               return taskRepository.findAllByEvent(event);
     }
 
-    public Task findByTaskId(long taskId) {
-        return taskRepository.findById(taskId).orElseThrow(InvalidParameterException::new);
+    public Optional<Task> findByTaskId(long taskId) {
+        return taskRepository.findById(taskId);
     }
 
-    public void addTask(Event event, Task task) {
+    public void addTask(Event event, Task task) { //maybe to check if there is such task and
+                                                // add the username of the person, who will be the creator of the task??
+                                                //maybe not to add event_id in the taskDto,because we can get it from the pathVariable
+                                                //just to make it similar to addEvent method in EventService
         if (event == null || eventService.getEventById(event.getId()).orElse(null) == null) {
             throw new ApiBadRequest("Invalid event");
         }
@@ -73,7 +79,41 @@ public class TaskService {
         }
         else throw new ApiBadRequest("Invalid task!");
     }
+    //......................................................
+    public boolean checkAssigneeByTaskId(Long task_id, User user){
+        Task task = taskRepository.findById(task_id).orElse(null);
 
+        if(task == null)
+        {
+            throw new ApiBadRequest("Invalid event");
+        }
+
+        return task.getAssignees().stream()
+                    .anyMatch(assignee -> assignee.getUsername().equals(user.getUsername()));
+    }
+
+    public List<String> getAssigneesByTaskId(Long task_id){
+        Task task = taskRepository.findById(task_id).orElse(null);
+
+        if(task == null)
+        {
+            throw new ApiBadRequest("Invalid event");
+        }
+
+        return task.getAssignees().stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
+    }
+
+//    public List<Task> getTasksByAssignee(User user) {
+//        Set<User> assignees =
+//        return taskRepository.findByAssignees(user);
+//    }
+
+    public List<Task> getTasksByAdmin(String username) {
+        return taskRepository.findByCreatorUsername(username);
+    }
+    //........................................................
     public void addAssigneeForTask(Long task_id, String username)
     {
         Task task = taskRepository.findById(task_id).orElse(null);
@@ -83,6 +123,10 @@ public class TaskService {
             EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
             if(nonNull(eventUser))
             {
+                if(task.getAssignees().contains(user)){
+                    throw new ApiBadRequest("User is already assigned to task");
+                }
+
                 task.getAssignees().add(user);
                 taskRepository.save(task);
             }
