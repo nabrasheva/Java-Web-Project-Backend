@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
+
 
 @Service
 @AllArgsConstructor
@@ -42,17 +44,17 @@ public class UserService {
     }
 
     public void updateUserById(Long user_id, String email, String first_name, String last_name, String picture_url, Date dob, String address)
-    {
+    { //can we add also the password and confirm password field, because I think that a user will change often his password
         User user = userRepository.findById(user_id).orElse(null);
         if(user == null)
             throw new ApiBadRequest("Invalid user!");
 
-        if(email!=null) user.setEmail(email);
-        if(first_name!=null) user.setFirst_name(first_name);
-        if(last_name!=null) user.setLast_name(last_name);
-        if(picture_url != null) user.setProfile_picture_url(picture_url);
-        if(dob !=null) user.setDate_of_birth(dob);
-        if(address!=null) user.setAddress(address);
+        if(nonNull(email)) user.setEmail(email);
+        if(nonNull(first_name)) user.setFirst_name(first_name);
+        if(nonNull(last_name)) user.setLast_name(last_name);
+        if(nonNull(picture_url)) user.setProfile_picture_url(picture_url);
+        if(nonNull(dob)) user.setDate_of_birth(dob);
+        if(nonNull(address)) user.setAddress(address);
         userRepository.save(user);
 
 

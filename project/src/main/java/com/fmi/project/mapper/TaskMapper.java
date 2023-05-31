@@ -1,18 +1,14 @@
 package com.fmi.project.mapper;
 
-import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
 import com.fmi.project.model.Event;
 import com.fmi.project.model.Task;
 import com.fmi.project.model.User;
-import com.fmi.project.repository.UserRepository;
 import com.fmi.project.service.EventService;
 import com.fmi.project.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +27,7 @@ public class TaskMapper {
                 .description(task.getDescription())
                 .due_date(task.getDue_date())
                 .status(task.getStatus())
-                .creator_username(task.getCreator_username())
+                .creatorUsername(task.getCreatorUsername())
                 .event_id(task.getEvent().getId())
                 .assignees(task.getAssignees().stream()
                             .map(User::getUsername).collect(Collectors.toList()))
@@ -44,7 +40,7 @@ public class TaskMapper {
                 .description(taskDto.getDescription())
                 .due_date(taskDto.getDue_date())
                 .status(taskDto.getStatus())
-                .creator_username(taskDto.getCreator_username())
+                .creatorUsername(taskDto.getCreatorUsername())
                 .assignees(taskDto.getAssignees().stream()
                                 .map(userService::findUserByUsername)
                                 .flatMap(Optional::stream)

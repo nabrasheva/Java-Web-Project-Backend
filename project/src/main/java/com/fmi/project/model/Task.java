@@ -39,7 +39,7 @@ public class Task {
     private Status status;
 
     @Column(name = "creator_username", nullable = false)
-    private String creator_username;
+    private String creatorUsername;
 
     @ManyToMany()
     @JoinTable(
