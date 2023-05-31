@@ -1,0 +1,472 @@
+{
+	"info": {
+		"_postman_id": "f2c2b27b-3f06-43c2-b3be-68630a185fc3",
+		"name": "EventPlanningAndColaborationToolProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26779097"
+	},
+	"item": [
+		{
+			"name": "getUserByUsername",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/users/userInfo/Georgi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"users",
+						"userInfo",
+						"Georgi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getEventByEventId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllEventsByUsername",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/Tsvetina",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"Tsvetina"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTasksByUsername",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/Niya123/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"Niya123",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTasksByEventId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/1/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTaskByEventIdAndTaskId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/1/tasks/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1",
+						"tasks",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAssigneesByTaskId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/1/tasks/1/assignees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1",
+						"tasks",
+						"1",
+						"assignees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"Georgi123\",\r\n    \"email\":\"georgi123@tset.com\",\r\n    \"password\":\"123bgdf3fefef\",\r\n    \"confirm_password\": \"123bgdf3fefef\",\r\n    \"first_name\": \"Georgi\",\r\n    \"last_name\": \"Tsekov\",\r\n    \"profile_picture_url\": null,\r\n    \"date_of_birth\": \"2001-06-23\",\r\n    \"address\": \"Sofia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/users/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addTaskByEventId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Make a decoration\",\r\n    \"description\": \"abv\",\r\n    \"due_date\": \"2023-06-14\",\r\n    \"status\": \"TO_DO\",\r\n    \"creator_username\": \"Georgi\",\r\n    \"event_id\": \"3\",\r\n    \"assignees\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/event/3/newTask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"3",
+						"newTask"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addEvent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Bаptism\",\r\n    \"date\": \"2023-06-02\",\r\n    \"location\": \"Sofia\",\r\n    \"description\": \"abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/newEvent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"newEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUserToEvent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Niya123\",\r\n    \"role\": \"PLANNER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/event/2/newUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"2",
+						"newUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAssigneeToTask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Tsvetina\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/event/2/tasks/3/newAssignee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"2",
+						"tasks",
+						"3",
+						"newAssignee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUserByUsername",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Gosho\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/users/updateUser/Georgi123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"users",
+						"updateUser",
+						"Georgi123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateEventByEventId",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-06-20\",\r\n    \"location\": \"Marinela Sofia\",\r\n    \"description\": \"nothing more to add\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/event/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTicketByEventIdAndTaskId",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": \"DONE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/events/event/1/tasks/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"1",
+						"tasks",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteEventByEventId",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTaskByEventIdAdnTaskId",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/events/event/3/tasks/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"events",
+						"event",
+						"3",
+						"tasks",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUserById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8079/users/userInfo/Georgi123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"users",
+						"userInfo",
+						"Georgi123"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
