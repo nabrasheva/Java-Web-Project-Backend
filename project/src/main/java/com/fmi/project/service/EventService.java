@@ -11,7 +11,7 @@ import com.fmi.project.repository.EventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +77,7 @@ public class EventService {
         }
     }
 
-    public void updateEventById(Long id, String description, String location, Date date)
+    public void updateEventById(Long id, String description, String location, LocalDate date)
     {
         Event event = eventRepository.findById(id).orElse(null);
 

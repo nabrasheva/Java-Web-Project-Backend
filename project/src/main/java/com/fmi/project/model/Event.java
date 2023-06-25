@@ -2,12 +2,13 @@ package com.fmi.project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -24,16 +25,19 @@ public class Event {
     private Long id;
 
     @Column(name = "name")
+    @Size(min = 1, max = 32)
     private String name;
 
     @Column(name = "date")
     @Future
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "location")
+    @Size(min = 5, max = 64)
     private String location;
 
     @Column(name = "description")
+    @Size(max = 128)
     private String description;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
@@ -44,9 +48,9 @@ public class Event {
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
-    private Timestamp created_date;
+    private Timestamp createdDate;
 
     @Column(name = "last_modified_date", nullable = false)
     @UpdateTimestamp
-    private Timestamp last_modified_date;
+    private Timestamp lastModifiedDate;
 }

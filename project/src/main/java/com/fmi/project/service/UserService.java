@@ -50,10 +50,10 @@ public class UserService {
             throw new ApiBadRequest("Invalid user!");
 
         if(nonNull(email)) user.setEmail(email);
-        if(nonNull(first_name)) user.setFirst_name(first_name);
-        if(nonNull(last_name)) user.setLast_name(last_name);
-        if(nonNull(picture_url)) user.setProfile_picture_url(picture_url);
-        if(nonNull(dob)) user.setDate_of_birth(dob);
+        if(nonNull(first_name)) user.setFirstName(first_name);
+        if(nonNull(last_name)) user.setLastName(last_name);
+        if(nonNull(picture_url)) user.setProfilePictureUrl(picture_url);
+        if(nonNull(dob)) user.setDateOfBirth(dob);
         if(nonNull(address)) user.setAddress(address);
         userRepository.save(user);
 

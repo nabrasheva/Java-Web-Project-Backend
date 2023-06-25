@@ -2,7 +2,6 @@ package com.fmi.project.controller;
 
 
 import com.fmi.project.controller.validation.ApiBadRequest;
-import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
@@ -12,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -71,8 +67,8 @@ public class UserController {
         }
 
         userService.updateUserById(user.getId(), toUpdateUserDto.getEmail(),
-                                    toUpdateUserDto.getFirst_name(), toUpdateUserDto.getLast_name(),
-                                    toUpdateUserDto.getProfile_picture_url(), toUpdateUserDto.getDate_of_birth(),
+                                    toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),
+                                    toUpdateUserDto.getProfilePictureUrl(), toUpdateUserDto.getDateOfBirth(),
                                     toUpdateUserDto.getAddress());
 
         return userMapper.toDto(user);
