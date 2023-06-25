@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/event_manager_db
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: admin123
     hikari:
       schema: event_manager
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   sql:
     init:
       mode: always
