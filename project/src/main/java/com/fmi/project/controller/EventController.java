@@ -1,6 +1,6 @@
 package com.fmi.project.controller;
 
-import com.fmi.project.controller.validation.ApiBadRequest;
+import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.AddUserToEventDto;
 import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
@@ -53,7 +53,7 @@ public class EventController {
         User user = userService.findUserByUsername(username).orElse(null);
 
         if(user == null){
-            throw new ApiBadRequest("There is no such user");
+            throw new ObjectNotFoundException("There is no such user");
         }
 
         List<Event> userAdminEvents = eventService.getEventsByRoleAndUser(Role.ADMIN, user);
@@ -73,7 +73,7 @@ public class EventController {
         User user = userService.findUserByUsername(username).orElse(null);
 
         if(user == null){
-            throw new ApiBadRequest("There is no such user");
+            throw new ObjectNotFoundException("There is no such user");
         }
 
 //        List<Task> assignedTasks = taskService.getTasksByAssignee(user);
@@ -106,7 +106,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         return eventMapper.toDto(event);
@@ -136,7 +136,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event!");
+            throw new ObjectNotFoundException("There is no such event!");
         }
 
         Task task = eventService.getTaskByEventIdAndTaskId(eventId, taskId);
@@ -157,7 +157,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event!");
+            throw new ObjectNotFoundException("There is no such event!");
         }
 
         return taskService.getAssigneesByTaskId(taskId);
@@ -189,7 +189,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         Task newTask = taskMapper.toEntity(taskDto);
@@ -212,7 +212,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         eventService.addUserToEvent(eventId, addUserToEventDto.getUsername(),
@@ -235,7 +235,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         Task task = eventService.getTaskByEventIdAndTaskId(eventId, taskId);
@@ -258,7 +258,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         eventService.updateEventById(event.getId(), toUpdateEventDto.getDescription(),
@@ -282,13 +282,13 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         Task task = taskService.findByTaskId(taskId).orElse(null);
 
         if(task == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         taskService.updateTaskById(task.getId(), toUpdateTaskDto.getName(), toUpdateTaskDto.getDescription(),
@@ -307,7 +307,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if(event == null){
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         eventService.deleteEvent(event);
@@ -328,7 +328,7 @@ public class EventController {
         Event event = eventService.getEventById(eventId).orElse(null);
 
         if (event == null) {
-            throw new ApiBadRequest("There is no such event");
+            throw new ObjectNotFoundException("There is no such event");
         }
 
         taskService.removeTask(event, taskId);

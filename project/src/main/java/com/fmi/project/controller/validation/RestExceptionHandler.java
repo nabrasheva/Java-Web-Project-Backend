@@ -20,15 +20,16 @@ import java.util.Map;
 @ControllerAdvice
 public class RestExceptionHandler {
   private static final String EXCEPTION_MESSAGE = "Exception occurred: {}";
+  private static final String ERROR_MESSAGE = "Message";
 
-  @ExceptionHandler({ApiBadRequest.class}) //400 // 404
-  public ResponseEntity<?> handleBadRequest(ApiBadRequest exception) {
-    // ApiErrorDto -> message, code
-    return ResponseEntity.badRequest().body(exception.getMessage() + " from advice");
+  @ExceptionHandler({ObjectNotFoundException.class})
+  public ResponseEntity<Map<String, String>> handleObjectNotFoundException(ObjectNotFoundException exception) {
+    log.error(EXCEPTION_MESSAGE, exception.getMessage());
+    return new ResponseEntity<>(Map.of(ERROR_MESSAGE, exception.getMessage()), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler({JsonProcessingException.class, HttpMessageConversionException.class})
-  public ResponseEntity<Map<String, String>> badRequestExceptionHandler(final Exception ex) {
+  public ResponseEntity<Map<String, String>> handleBadRequestException(final Exception ex) {
     log.error(EXCEPTION_MESSAGE, ex.getMessage());
     return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.BAD_REQUEST);
   }
