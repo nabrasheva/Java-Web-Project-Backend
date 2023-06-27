@@ -4,17 +4,13 @@ import com.fmi.project.controller.validation.ApiBadRequest;
 import com.fmi.project.dto.AddUserToEventDto;
 import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
-import com.fmi.project.dto.UserDto;
 import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
-import com.fmi.project.mapper.TaskMapper;
-import com.fmi.project.mapper.UserMapper;
+import com.fmi.project.mapper.TaskMapper;;
 import com.fmi.project.model.Event;
-import com.fmi.project.model.EventUser;
 import com.fmi.project.model.Task;
 import com.fmi.project.model.User;
 import com.fmi.project.service.EventService;
-import com.fmi.project.service.EventUserService;
 import com.fmi.project.service.TaskService;
 import com.fmi.project.service.UserService;
 import lombok.AllArgsConstructor;
@@ -26,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -74,6 +68,10 @@ public class EventController {
         return eventMapper.toDtoCollection(allEvents);
     }
 
+    /**
+     *   @param     username
+     *   @return    all tasks by the entered username
+     */
     @GetMapping("/{username}/tasks")
     public List<TaskDto> getAllTasksByUsername(@PathVariable(name = "username")String username){
         User user = userService.findUserByUsername(username).orElse(null);

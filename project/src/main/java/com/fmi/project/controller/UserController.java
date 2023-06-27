@@ -2,7 +2,6 @@ package com.fmi.project.controller;
 
 
 import com.fmi.project.controller.validation.ApiBadRequest;
-import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
@@ -12,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -50,7 +46,7 @@ public class UserController {
         User newUser = userMapper.toEntity(userDto);
         userService.addUser(newUser);
 
-        return new ResponseEntity<String>("Successfully added user", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully added user", HttpStatus.OK);
 
     }
 
@@ -93,7 +89,7 @@ public class UserController {
 
         userService.deleteUser(user);
 
-        return new ResponseEntity<String>("Successfully deleted user", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully deleted user", HttpStatus.OK);
     }
 
 }
