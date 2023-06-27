@@ -17,3 +17,10 @@ spring:
 
 server:
   port: 8079
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs:
+    path: /docs
