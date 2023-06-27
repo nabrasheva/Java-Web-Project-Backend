@@ -6,6 +6,7 @@ import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.TaskDto;
 import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
+import com.fmi.project.mapper.TaskMapper;;
 import com.fmi.project.mapper.TaskMapper;
 import com.fmi.project.model.Event;
 import com.fmi.project.model.Task;
@@ -68,6 +69,10 @@ public class EventController {
         return eventMapper.toDtoCollection(allEvents);
     }
 
+    /**
+     *   @param     username
+     *   @return    all tasks by the entered username
+     */
     @GetMapping("/{username}/tasks")
     public List<TaskDto> getAllTasksByUsername(@PathVariable(name = "username")String username){
         User user = userService.findUserByUsername(username).orElse(null);
