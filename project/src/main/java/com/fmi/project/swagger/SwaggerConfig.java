@@ -1,4 +1,4 @@
-package com.fmi.project.config;
+package com.fmi.project.swagger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,7 +12,7 @@ public class SwaggerConfig {
   public OpenAPI notificationsOpenAPI() {
     return new OpenAPI()
         .info(new Info().title("Event manager API")
-            .description("University project")
-            .version("v0.0.1"));
+            .description("University project which implements event manager application")
+            .version("V0.0.1"));
   }
 }
