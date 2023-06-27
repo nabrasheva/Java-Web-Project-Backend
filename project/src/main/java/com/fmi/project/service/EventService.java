@@ -100,7 +100,7 @@ public class EventService {
     public Task getTaskByEventIdAndTaskId(Long eventId, Long taskId){
         Event event1 = eventRepository.findById(eventId).orElse(null);
 
-        if(event1 == null) throw new ApiBadRequest("Invalid event!");
+        if(event1 == null) throw new ApiBadRequest("Invalid event!"); //NotFoundObject
 
         Task task1 = event1.getTasks().stream()
                                         .filter(task -> task.getId() == taskId)

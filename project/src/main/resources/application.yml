@@ -1,5 +1,24 @@
 spring:
   profiles:
     active: dev
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: fn72039@g.fmi.uni-sofia.bg
+    password: 123d
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+application:
+  security:
+    jwt:
+      secret-key: 7dcef4b3f91c14fe3c60698ee6e90e3bb2403ef94672d7679a487d17c94953b3b1cbc1f7c0a19d7b79551d7e6538170fc05839feef096adb72fd39761eedd94c
+      expiration: 3600000
+
 server:
   port: 8079
+

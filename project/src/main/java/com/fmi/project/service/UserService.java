@@ -3,6 +3,7 @@ import com.fmi.project.controller.validation.ApiBadRequest;
 import com.fmi.project.model.User;
 import com.fmi.project.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -15,10 +16,16 @@ import static java.util.Objects.nonNull;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Optional<User> findUserByUsername(String username)
     {
         return userRepository.findFirstByUsername(username);
+    }
+
+    public Optional<User> findUserByEmail(String email)
+    {
+        return userRepository.findFirstByEmail(email);
     }
 
     public void addUser(User user)
@@ -58,5 +65,10 @@ public class UserService {
         userRepository.save(user);
 
 
+    }
+
+    public void updateUserPassword(User user, String password){
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 }

@@ -3,13 +3,19 @@ package com.fmi.project.mapper;
 
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.model.User;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 
 @Component
+@AllArgsConstructor
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
     public UserDto toDto(User user){
         return UserDto.builder()
                 .username(user.getUsername())
@@ -26,11 +32,12 @@ public class UserMapper {
         return User.builder()
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .first_name(userDto.getFirst_name())
                 .profile_picture_url(userDto.getProfile_picture_url())
                 .date_of_birth(userDto.getDate_of_birth())
                 .address(userDto.getAddress())
+                //role(UserAuthRole.USER)
                 .build();
     }
 }

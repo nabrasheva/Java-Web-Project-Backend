@@ -6,14 +6,24 @@ import com.fmi.project.dto.EventDto;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
+import com.fmi.project.service.EmailSenderService;
+import com.fmi.project.service.JwtService;
 import com.fmi.project.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,6 +33,9 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final EmailSenderService emailSenderService;
+
+    //TODO: GetMapping for "/verifyEmail/{token}" - that page will contain a message for successful verification and a lint to the login page
 
     /**
      *
@@ -46,12 +59,29 @@ public class UserController {
      * @return response with successfully added user
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> addUser(@RequestBody UserDto userDto){
+    public ResponseEntity<String> addUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            StringBuilder messages = new StringBuilder();
+
+            for(FieldError error : bindingResult.getFieldErrors()){
+                messages.append(error.getDefaultMessage()).append("; ");
+            }
+
+            return ResponseEntity.badRequest().body(messages.toString());
+        }
+
         User newUser = userMapper.toEntity(userDto);
+        //newUser.setEnabled(false);
         userService.addUser(newUser);
 
-        return new ResponseEntity<String>("Successfully added user", HttpStatus.OK);
+        String subject = "Email verification:";
+        String body = "Click here, in order to verify your email: http:localhost:8079//verifyEmail/";
 
+        emailSenderService.sendEmail(newUser.getEmail(), subject, body);
+
+        return new ResponseEntity<String>("Successfully added user. Please, check you email for verification.",
+                                            HttpStatus.OK);
     }
 
     /**
