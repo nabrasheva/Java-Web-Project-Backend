@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/signup").permitAll()
+                        .requestMatchers("/users/signup").permitAll()
                         .requestMatchers("/sendPasswordResetEmail").permitAll()
                         .requestMatchers("/resetPassword/*").permitAll()
                         .requestMatchers("/verifyEmail/*").permitAll()

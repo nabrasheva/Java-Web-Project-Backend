@@ -76,7 +76,7 @@ public class UserController {
         userService.addUser(newUser);
 
         String subject = "Email verification:";
-        String body = "Click here, in order to verify your email: http:localhost:8079//verifyEmail/";
+        String body = "Click here, in order to verify your email: http://localhost:8079/verifyEmail/";
 
         emailSenderService.sendEmail(newUser.getEmail(), subject, body);
 

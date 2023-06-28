@@ -42,7 +42,7 @@ public class ForgotPasswordController {
         }
 
         String subject = "Password reset:";
-        String body = "Click here, in order to reset your password: http:localhost:8079//resetPassword/";
+        String body = "Click here, in order to reset your password: http://localhost:8079/resetPassword/";
 
         emailSenderService.sendEmail(emailDto.getEmail(), subject, body);
 
