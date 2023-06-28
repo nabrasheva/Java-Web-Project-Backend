@@ -1,6 +1,8 @@
 package com.fmi.project.dto;
 
 import com.fmi.project.enums.Status;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +16,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskDto {
-    private String name;
-    private String description;
-    private Date due_date;
-    private Status status;
-    private String creatorUsername;
-    private Long event_id;
-    private List<String> assignees;
+  @Size(min = 1, max = 32)
+  private String name;
+  @Size(max = 128)
+  private String description;
+  @Future
+  private Date dueDate;
+  @Size(max = 16)
+  private Status status;
+  @Size(max = 32)
+  private String creatorUsername;
+  private Long eventId;
+  private List<String> assignees;
 }

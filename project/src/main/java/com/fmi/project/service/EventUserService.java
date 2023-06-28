@@ -1,6 +1,5 @@
 package com.fmi.project.service;
 
-import com.fmi.project.controller.validation.ApiBadRequest;
 import com.fmi.project.enums.Role;
 import com.fmi.project.model.Event;
 import com.fmi.project.model.EventUser;

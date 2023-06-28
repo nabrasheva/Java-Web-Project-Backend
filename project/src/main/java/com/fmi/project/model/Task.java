@@ -3,6 +3,7 @@ package com.fmi.project.model;
 import com.fmi.project.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,9 +26,11 @@ public class Task {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @Size(min = 1, max = 32)
     private String name;
 
     @Column(name = "description")
+    @Size(max = 128)
     private String description;
 
     @Column(name="due_date", nullable = false)
@@ -36,9 +39,11 @@ public class Task {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Size(max = 16)
     private Status status;
 
     @Column(name = "creator_username", nullable = false)
+    @Size(max = 32)
     private String creatorUsername;
 
     @ManyToMany()
@@ -55,9 +60,9 @@ public class Task {
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
-    private Timestamp created_date;
+    private Timestamp createdDate;
 
     @Column(name = "last_modified_date", nullable = false)
     @UpdateTimestamp
-    private Timestamp last_modified_date;
+    private Timestamp lastModifiedDate;
 }

@@ -2,6 +2,7 @@ package com.fmi.project.controller;
 
 
 import com.fmi.project.controller.validation.ApiBadRequest;
+import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
@@ -30,7 +31,7 @@ public class UserController {
         User user = userService.findUserByUsername(username).orElse(null);
 
         if(user == null){
-            throw new ApiBadRequest("There is no such user");
+            throw new ObjectNotFoundException("There is no such user");
         }
 
         return userMapper.toDto(user);
@@ -63,12 +64,12 @@ public class UserController {
         User user = userService.findUserByUsername(username).orElse(null);
 
         if(user == null){
-            throw new ApiBadRequest("There is no such user");
+            throw new ObjectNotFoundException("There is no such user");
         }
 
         userService.updateUserById(user.getId(), toUpdateUserDto.getEmail(),
-                                    toUpdateUserDto.getFirst_name(), toUpdateUserDto.getLast_name(),
-                                    toUpdateUserDto.getProfile_picture_url(), toUpdateUserDto.getDate_of_birth(),
+                                    toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),
+                                    toUpdateUserDto.getProfilePictureUrl(), toUpdateUserDto.getDateOfBirth(),
                                     toUpdateUserDto.getAddress());
 
         return userMapper.toDto(user);
@@ -84,7 +85,7 @@ public class UserController {
         User user = userService.findUserByUsername(username).orElse(null);
 
         if(user == null){
-            throw new ApiBadRequest("The is no such user");
+            throw new ObjectNotFoundException("The is no such user");
         }
 
         userService.deleteUser(user);

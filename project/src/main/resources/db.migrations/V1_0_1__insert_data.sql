@@ -21,4 +21,3 @@ insert into event_manager.events_users (role, category, user_id, event_id, creat
 insert into event_manager.users_tasks (task_id, user_id) values (1, 1);
 insert into event_manager.users_tasks (task_id, user_id) values (2, 1);
 insert into event_manager.users_tasks (task_id, user_id) values (3, 2);
-insert into event_manager.users_tasks (task_id, user_id) values (4, 3);

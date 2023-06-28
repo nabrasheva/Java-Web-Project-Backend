@@ -1,6 +1,6 @@
 package com.fmi.project.service;
 
-import com.fmi.project.controller.validation.ApiBadRequest;
+import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
 import com.fmi.project.model.Event;
@@ -11,7 +11,7 @@ import com.fmi.project.repository.EventRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,15 +43,15 @@ public class EventService {
         List<Event> eventList = eventRepository.findAll();
         User newEventCreator = userService.findUserByUsername(username).orElse(null);
 
-        if(newEventCreator == null) throw new ApiBadRequest("User do not exist!");
+        if(newEventCreator == null) throw new ObjectNotFoundException("User do not exist!");
         eventList.forEach(event1 -> {
 
            EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1).orElse(null);
-           if(eventUserForCreator == null) throw new ApiBadRequest("EventUser row does not exist!");
+           if(eventUserForCreator == null) throw new ObjectNotFoundException("EventUser row does not exist!");
            User eventCreator = eventUserForCreator.getUser();
 
             if (eventCreator.getId().equals(newEventCreator.getId()) && event.getName().equals(event1.getName())) {
-                throw new ApiBadRequest("Event already exists!");
+                throw new ObjectNotFoundException("Event already exists!");
             }
         });
 
@@ -77,7 +77,7 @@ public class EventService {
         }
     }
 
-    public void updateEventById(Long id, String description, String location, Date date)
+    public void updateEventById(Long id, String description, String location, LocalDate date)
     {
         Event event = eventRepository.findById(id).orElse(null);
 
@@ -89,7 +89,7 @@ public class EventService {
 
             eventRepository.save(event);
         }
-        else throw new ApiBadRequest("Invalid event!");
+        else throw new ObjectNotFoundException("Invalid event!");
     }
 
     public Optional<Event> getEventById(Long id)
@@ -100,14 +100,14 @@ public class EventService {
     public Task getTaskByEventIdAndTaskId(Long eventId, Long taskId){
         Event event1 = eventRepository.findById(eventId).orElse(null);
 
-        if(event1 == null) throw new ApiBadRequest("Invalid event!");
+        if(event1 == null) throw new ObjectNotFoundException("Invalid event!");
 
         Task task1 = event1.getTasks().stream()
                                         .filter(task -> task.getId() == taskId)
                                         .findFirst()
                                         .orElse(null);
 
-        if(task1 == null) throw new ApiBadRequest("Invalid task for this event");
+        if(task1 == null) throw new ObjectNotFoundException("Invalid task for this event");
 
         return task1;
     }
@@ -116,7 +116,7 @@ public class EventService {
     {
         Event event1 = eventRepository.findById(eventId).orElse(null);
 
-        if(event1 == null) throw new ApiBadRequest("Invalid event!");
+        if(event1 == null) throw new ObjectNotFoundException("Invalid event!");
 
         return event1.getTasks().stream().toList();
     }
@@ -128,7 +128,7 @@ public class EventService {
         if(nonNull(event) && nonNull(user))
         {
             EventUser eventUser = eventUserService.findFirstByEventAndUser(event, user).orElse(null);
-            if(nonNull(eventUser)) throw new ApiBadRequest("User is already added to event!");
+            if(nonNull(eventUser)) throw new ObjectNotFoundException("User is already added to event!");
             EventUser createdEventUser;
             if(role == Role.GUEST)
             {
