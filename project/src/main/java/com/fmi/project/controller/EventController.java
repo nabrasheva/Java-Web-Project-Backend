@@ -28,6 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/events")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class EventController {
 
     private final EventService eventService;
@@ -157,11 +158,13 @@ public class EventController {
      * @return response, which tell us, that the event is successfully added
      */
     @PostMapping("/newEvent/{email}")
-    public ResponseEntity<String> addEvent(@PathVariable String email, @RequestBody EventDto eventDto){
+    public ResponseEntity<Object> addEvent(@PathVariable String email, @RequestBody EventDto eventDto){
         Event newEvent = eventMapper.toEntity(eventDto);
         eventService.addEvent(newEvent, email);
 
-        return new ResponseEntity<String>("Successfully added event", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added event");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

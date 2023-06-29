@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+//TODO CHANGE FUNCTION NAMES ID -> NAME
 @Slf4j
 @RestController
 @RequestMapping("users")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200") //TODO: ADD CORS POLITICS
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -43,7 +45,7 @@ public class UserController {
         User newUser = userMapper.toEntity(userDto);
         userService.addUser(newUser);
 
-        return new ResponseEntity<>("Successfully added user", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully added user", HttpStatus.OK); //TODO: CHANGE TO JSON FORMAT->VIEW ADD_EVENT
     }
 
     /**
