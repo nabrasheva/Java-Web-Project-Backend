@@ -21,8 +21,6 @@ import static java.util.Objects.nonNull;
 @Service
 @AllArgsConstructor
 public class TaskService {
-  private static final String NON_EXISTING_EVENT_MESSAGE = "Invalid event";
-  private static final String NON_EXISTING_TASK_MESSAGE = "Invalid task!";
 
   private final TaskRepository taskRepository;
   private final EventService eventService;
@@ -37,41 +35,44 @@ public class TaskService {
     return taskRepository.findById(taskId);
   }
 
-  public void addTask(Event event, Task task) { //maybe to check if there is such task and
-    // add the username of the person, who will be the creator of the task??
-    //maybe not to add event_id in the taskDto,because we can get it from the pathVariable
-    //just to make it similar to addEvent method in EventService
-    if (event == null || eventService.getEventById(event.getId()).orElse(null) == null) {
-      throw new ObjectNotFoundException(NON_EXISTING_EVENT_MESSAGE);
+  //public Optional <Task>
+
+  public void addTask(Event event, Task task) {
+    taskRepository.findFirstByName(task.getName()).orElseThrow(() -> new ObjectNotFoundException("Invalid task!"));
+
+    if (event == null || eventService.getEventByName(event.getName()).orElse(null) == null) {
+      throw new ObjectNotFoundException("Invalid event");
     }
 
     event.getTasks().add(task);
+
     taskRepository.save(task);
   }
 
-  public void removeTask(Event event, Long task_id) {
-    Task task = taskRepository.findById(task_id).orElse(null);
-
-    if (task == null) {
-      throw new ObjectNotFoundException(NON_EXISTING_EVENT_MESSAGE);
-    }
+  public void removeTask(Event event, String taskName) {
+    Task task = taskRepository.findFirstByName(taskName).orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
 
     if (task.getEvent().getId().equals(event.getId())) {
       event.getTasks().remove(task);
       taskRepository.delete(task);
-    } else throw new ObjectNotFoundException(NON_EXISTING_EVENT_MESSAGE);
+    } else throw new ObjectNotFoundException("Invalid event");
 
   }
 
-  public void updateTaskById(Long id, String name, String description, Date due_date, Status status) {
-    Task task = taskRepository.findById(id).orElse(null);
-    if (nonNull(task)) {
-      if (nonNull(name)) task.setName(name);
-      if (nonNull(description)) task.setDescription(description);
-      if (nonNull(due_date)) task.setDue_date(due_date);
-      if (nonNull(status)) task.setStatus(status);
-      taskRepository.save(task);
-    } else throw new ObjectNotFoundException(NON_EXISTING_TASK_MESSAGE);
+  public Task updateTaskById(String name, String description, Date due_date, Status status) {
+    Task task = taskRepository.findFirstByName(name).orElseThrow(() -> new ObjectNotFoundException("Invalid task!"));
+
+    if (nonNull(name)) task.setName(name);
+
+    if (nonNull(description)) task.setDescription(description);
+
+    if (nonNull(due_date)) task.setDue_date(due_date);
+
+    if (nonNull(status)) task.setStatus(status);
+
+    taskRepository.save(task);
+
+    return task;
   }
 
   //......................................................
@@ -79,22 +80,18 @@ public class TaskService {
     Task task = taskRepository.findById(task_id).orElse(null);
 
     if (task == null) {
-      throw new ObjectNotFoundException(NON_EXISTING_EVENT_MESSAGE);
+      throw new ObjectNotFoundException("Invalid event");
     }
 
     return task.getAssignees().stream()
         .anyMatch(assignee -> assignee.getUsername().equals(user.getUsername()));
   }
 
-  public List<String> getAssigneesByTaskId(Long task_id) {
-    Task task = taskRepository.findById(task_id).orElse(null);
-
-    if (task == null) {
-      throw new ObjectNotFoundException(NON_EXISTING_EVENT_MESSAGE);
-    }
+  public List<String> getAssigneesByTaskName(String taskName) {
+    Task task = taskRepository.findFirstByName(taskName).orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
 
     return task.getAssignees().stream()
-        .map(User::getUsername)
+        .map(User::getEmail)
         .collect(Collectors.toList());
   }
 
@@ -103,17 +100,20 @@ public class TaskService {
 //        return taskRepository.findByAssignees(user);
 //    }
 
-  public List<Task> getTasksByAdmin(String username) {
-    return taskRepository.findByCreatorUsername(username);
+  public List<Task> getTasksByAdmin(String email) {
+    return taskRepository.findByCreatorEmail(email);
   }
 
   //........................................................
-  public void addAssigneeForTask(Long task_id, String username) {
-    Task task = taskRepository.findById(task_id).orElse(null);
-    User user = userService.findUserByUsername(username).orElse(null);
+  public void addAssigneeForTask(String taskName, String email) {
+    Task task = taskRepository.findFirstByName(taskName).orElse(null);
+    User user = userService.findUserByEmail(email).orElse(null);
+
     if (nonNull(task) && nonNull(user)) {
       EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
+
       if (nonNull(eventUser)) {
+
         if (task.getAssignees().contains(user)) {
           throw new ObjectNotFoundException("User is already assigned to task");
         }

@@ -24,8 +24,8 @@ public class TaskDto {
   private Date dueDate;
   @Size(max = 16)
   private Status status;
-  @Size(max = 32)
-  private String creatorUsername;
-  private Long eventId;
+  @Size(max = 64)
+  private String creatorEmail;
+  private String eventName;
   private List<String> assignees;
 }

@@ -24,7 +24,7 @@ public class Event {
     @Column(insertable = false, updatable = false, name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @Size(min = 1, max = 32)
     private String name;
 

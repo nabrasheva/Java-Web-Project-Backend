@@ -30,7 +30,7 @@ public class User {
   @Size(min = 1, max = 32)
   private String username;
 
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   @Email()
   @Size(max = 64)
   private String email;
