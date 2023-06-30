@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-
 @Component
 @AllArgsConstructor
 public class UserMapper {
@@ -21,9 +18,9 @@ public class UserMapper {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .first_name(user.getFirst_name())
-                .profile_picture_url(user.getProfile_picture_url())
-                .date_of_birth(user.getDate_of_birth())
+                .firstName(user.getFirstName())
+                .profilePictureUrl(user.getProfilePictureUrl())
+                .dateOfBirth(user.getDateOfBirth())
                 .address(user.getAddress())
                 .build();
     }
@@ -32,12 +29,11 @@ public class UserMapper {
         return User.builder()
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .first_name(userDto.getFirst_name())
-                .profile_picture_url(userDto.getProfile_picture_url())
-                .date_of_birth(userDto.getDate_of_birth())
+                .password(passwordEncoder.encode(userDto.getPassword())
+                .firstName(userDto.getFirstName())
+                .profilePictureUrl(userDto.getProfilePictureUrl())
+                .dateOfBirth(userDto.getDateOfBirth())
                 .address(userDto.getAddress())
-                //role(UserAuthRole.USER)
                 .build();
     }
 }

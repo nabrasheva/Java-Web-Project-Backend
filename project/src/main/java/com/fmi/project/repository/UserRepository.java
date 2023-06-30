@@ -12,7 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findFirstByUsername(final String username);
 
-    //TODO: findFirstByEmail
-    //TODO: in application.properties to add configurations required for using Gmail SMTP server
     Optional<User> findFirstByEmail(final String email);
 }

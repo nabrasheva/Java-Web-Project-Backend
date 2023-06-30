@@ -40,9 +40,9 @@ public class EventUser {
 
     @Column(name = "created_date", nullable = false)
     @CreationTimestamp
-    private Timestamp created_date;
+    private Timestamp createdDate;
 
     @Column(name = "last_modified_date", nullable = false)
     @UpdateTimestamp
-    private Timestamp last_modified_date;
+    private Timestamp lastModifiedDate;
 }

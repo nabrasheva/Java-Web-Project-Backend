@@ -1,8 +1,6 @@
 package com.fmi.project.controller;
 
-
-import com.fmi.project.controller.validation.ApiBadRequest;
-import com.fmi.project.dto.EventDto;
+import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
@@ -25,11 +23,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("users")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200") //TODO: ADD CORS POLITICS
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -39,91 +40,72 @@ public class UserController {
 
     /**
      *
-     * @param username
+     * @param email  email of the user
      * @return userDto object
      */
-    @GetMapping("/userInfo/{username}")
-    public UserDto getUser(@PathVariable(name = "username") String username) {
-        User user = userService.findUserByUsername(username).orElse(null);
+    @GetMapping("/userInfo/{email}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String email) {
+        User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User does not exist!"));
 
-        if(user == null){
-            throw new ApiBadRequest("There is no such user");
-        }
-
-        return userMapper.toDto(user);
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
     }
 
     /**
      *
-     * @param userDto
+     * @param userDto  object, that contains information about the user's request
      * @return response with successfully added user
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> addUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
-
-        if(bindingResult.hasErrors()){
-            StringBuilder messages = new StringBuilder();
-
-            for(FieldError error : bindingResult.getFieldErrors()){
-                messages.append(error.getDefaultMessage()).append("; ");
-            }
-
-            return ResponseEntity.badRequest().body(messages.toString());
-        }
-
+    public ResponseEntity<Object> addUser(@RequestBody UserDto userDto){
         User newUser = userMapper.toEntity(userDto);
         //newUser.setEnabled(false);
         userService.addUser(newUser);
 
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added user");
         String subject = "Email verification:";
         String body = "Click here, in order to verify your email: http://localhost:8079/verifyEmail/";
 
         emailSenderService.sendEmail(newUser.getEmail(), subject, body);
 
-        return new ResponseEntity<String>("Successfully added user. Please, check you email for verification.",
-                                            HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        //return new ResponseEntity<String>("Successfully added user. Please, check you email for verification.",
+         //                                   HttpStatus.OK);
     }
 
     /**
      *
-     * @param username
-     * @param toUpdateUserDto
-     * @return updated userDto
+     * @param email - email of the user
+     * @param toUpdateUserDto object, that contains information about the user's request
+     * @return updated userDto object, that contains information about the updated user's data (response)
      */
-    @PatchMapping("/updateUser/{username}")
-    public UserDto updateUser(@PathVariable(name = "username") String username,
+    @PatchMapping("/updateUser/{email}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable String email,
                               @RequestBody UserDto toUpdateUserDto){
 
-        User user = userService.findUserByUsername(username).orElse(null);
+        User user = userService.updateUserByEmail(email,
+                                toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),
+                                toUpdateUserDto.getProfilePictureUrl(), toUpdateUserDto.getDateOfBirth(),
+                                toUpdateUserDto.getAddress());
 
-        if(user == null){
-            throw new ApiBadRequest("There is no such user");
-        }
-
-        userService.updateUserById(user.getId(), toUpdateUserDto.getEmail(),
-                                    toUpdateUserDto.getFirst_name(), toUpdateUserDto.getLast_name(),
-                                    toUpdateUserDto.getProfile_picture_url(), toUpdateUserDto.getDate_of_birth(),
-                                    toUpdateUserDto.getAddress());
-
-        return userMapper.toDto(user);
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
     }
 
     /**
      *
-     * @param username
+     * @param email email of the user
      * @return response with message for successfully deleted user
      */
-    @DeleteMapping("/userInfo/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "username") String username){
-        User user = userService.findUserByUsername(username).orElse(null);
-
-        if(user == null){
-            throw new ApiBadRequest("The is no such user");
-        }
-
+    @DeleteMapping("/userInfo/{email}")
+    public ResponseEntity<Object> deleteUser(@PathVariable String email){
+        User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("The is no such user"));
         userService.deleteUser(user);
 
-        return new ResponseEntity<String>("Successfully deleted user", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully deleted user");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
