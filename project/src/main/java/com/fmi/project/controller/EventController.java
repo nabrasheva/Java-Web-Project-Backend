@@ -39,14 +39,12 @@ public class EventController {
 
     private final UserService userService;
 
-    //TODO: @GetMapping to output tasks from user with username
-
     //TODO: @DeleteMapping to remove a user from event eventId
 
     //TODO: @DeleteMapping to remove an assignee from task with taskId
 
     /**
-     *   @param     email
+     *   @param     email email of the user
      *   @return    all events, in which the user with this username participate
      *              regardless of the role
      */
@@ -64,15 +62,15 @@ public class EventController {
         map.put("planner", userPlannerEvents);
         map.put("guest", userGuestEvents);
 
-        return new ResponseEntity<>(map, HttpStatus.OK);//eventMapper.toDtoCollection(allEvents);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     /**
-     *   @param     email
+     *   @param     email email of the user
      *   @return    all tasks by the entered email
      */
     @GetMapping("/{email}/tasks")
-    public ResponseEntity<Object> getAllTasksByUsername(@PathVariable String email){
+    public ResponseEntity<Object> getAllTasksByEmail(@PathVariable String email){
         User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User does not exist!"));
 
 //        List<Task> assignedTasks = taskService.getTasksByAssignee(user);
@@ -97,11 +95,11 @@ public class EventController {
     }
 
     /**
-     *   @param  name
+     *   @param  name name of the event
      *   @return the event with the corresponding name
      */
     @GetMapping("/event/{name}")
-    public ResponseEntity<EventDto> getEventById(@PathVariable String name){
+    public ResponseEntity<EventDto> getEventByName(@PathVariable String name){
         Event event = eventService.getEventByName(name).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         return new ResponseEntity<>(eventMapper.toDto(event), HttpStatus.OK);
@@ -109,11 +107,11 @@ public class EventController {
 
     /**
      *
-     * @param  name
+     * @param  name name of the event
      * @return all tasks, which are contained in the event with eventName
      */
     @GetMapping("/event/{name}/tasks")
-    public ResponseEntity<Object> getAllTasksByEventId(@PathVariable String name){
+    public ResponseEntity<Object> getAllTasksByEventName(@PathVariable String name){
         List<Task> tasks = eventService.getAllTasksByEvent(name);
 
         return new ResponseEntity<>(taskMapper.toDtoCollection(tasks), HttpStatus.OK);
@@ -121,12 +119,12 @@ public class EventController {
 
     /**
      *
-     * @param eventName
-     * @param taskName
+     * @param eventName name of the event
+     * @param taskName name of the task
      * @return the task with corresponding taskName and eventName
      */
     @GetMapping("/event/{eventName}/tasks/{taskName}")
-    public ResponseEntity<TaskDto> getTaskById(@PathVariable String eventName,
+    public ResponseEntity<TaskDto> getTaskByName(@PathVariable String eventName,
                                @PathVariable String taskName){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event!"));
@@ -138,12 +136,12 @@ public class EventController {
 
     /**
      *
-     * @param eventName
-     * @param taskName
+     * @param eventName name of the event
+     * @param taskName name of the task
      * @return assignees, which are assigned to the task with taskName
      */
     @GetMapping("/event/{eventName}/tasks/{taskName}/assignees")
-    public ResponseEntity<Object> getAssigneesByTaskId(@PathVariable String eventName,
+    public ResponseEntity<Object> getAssigneesByTaskName(@PathVariable String eventName,
                                                         @PathVariable String taskName){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event!"));
@@ -153,8 +151,8 @@ public class EventController {
 
     /**
      *
-     * @param  eventDto
-     * @param email
+     * @param  eventDto request, that contains information about the event, which will be added
+     * @param email email of the user
      * @return response, which tell us, that the event is successfully added
      */
     @PostMapping("/newEvent/{email}")
@@ -164,36 +162,39 @@ public class EventController {
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Successfully added event");
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param eventName
-     * @param taskDto
+     * @param eventName name of the event
+     * @param taskDto request, that contains information about the task, which will be added
      * @return response, which tell us, that the task is successfully added in the event with eventId
      */
     @PostMapping("/event/{eventName}/newTask") //TaskDto
-    public ResponseEntity<String> addTaskByEventId(@PathVariable String eventName,
+    public ResponseEntity<Object> addTaskByEventName(@PathVariable String eventName,
                                                    @RequestBody TaskDto taskDto){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         Task newTask = taskMapper.toEntity(taskDto);
-
         taskService.addTask(event, newTask);
 
-        return new ResponseEntity<String>("Successfully added task", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added task");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param eventName
-     * @param addUserToEventDto
+     * @param eventName name of the event
+     * @param addUserToEventDto request, that contains information about the user, who will be added to this event
      * @return response with message for successfully added user to event with eventId
      */
     @PostMapping("/event/{eventName}/newUser")
-    public ResponseEntity<String> addUserToEvent(@PathVariable String eventName,
+    public ResponseEntity<Object> addUserToEvent(@PathVariable String eventName,
                                                  @RequestBody AddUserToEventDto addUserToEventDto){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
@@ -201,33 +202,39 @@ public class EventController {
         eventService.addUserToEvent(eventName, addUserToEventDto.getEmail(),
                                     addUserToEventDto.getRole(), addUserToEventDto.getCategory());
 
-        return new ResponseEntity<String>("Successfully added user to event", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added user to event");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param eventName
-     * @param taskName
+     * @param eventName name of the event
+     * @param taskName name of the task
+     * @param json request
      * @return response with message for successfully added assignee to task with taskId
      */
     @PostMapping("/event/{eventName}/tasks/{taskName}/newAssignee")
-    public ResponseEntity<String> addAssigneeToTask(@PathVariable String eventName,
+    public ResponseEntity<Object> addAssigneeToTask(@PathVariable String eventName,
                                                     @PathVariable String taskName,
                                                     @RequestBody Map<String, String> json){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         Task task = eventService.getTaskByEventNameAndTaskName(eventName, taskName);
-
         taskService.addAssigneeForTask(taskName, json.get("username"));
 
-        return new ResponseEntity<>("Successfully added assignee to task", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added assignee to task");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param eventName
-     * @param toUpdateEventDto
+     * @param eventName name of the event
+     * @param toUpdateEventDto request, that contains information about the event with new data for this event
      * @return eventDto
      */
     @PatchMapping("/event/{eventName}")
@@ -242,9 +249,9 @@ public class EventController {
 
     /**
      *
-     * @param eventName
-     * @param taskName
-     * @param toUpdateTaskDto
+     * @param eventName name of the event
+     * @param taskName name of the task
+     * @param toUpdateTaskDto request, that contains information about the task with new data for this task
      * @return taskDto
      */
     @PatchMapping("/event/{eventName}/tasks/{taskName}")
@@ -262,32 +269,38 @@ public class EventController {
 
     /**
      *
-     * @param eventName
+     * @param eventName name of the event
      * @return response, which tell us, that the event with eventName is successfully deleted
      */
     @DeleteMapping("/event/{eventName}")
-    public ResponseEntity<String> deleteEvent(@PathVariable String eventName){
+    public ResponseEntity<Object> deleteEvent(@PathVariable String eventName){
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
         eventService.deleteEvent(event);
 
-        return new ResponseEntity<String>("Successfully deleted event", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully deleted event");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param eventName
-     * @param taskName
+     * @param eventName name of the event
+     * @param taskName name of the task
      * @return response, which tell us, that the task with taskName is successfully deleted in the event with eventName
      */
     @DeleteMapping("/event/{eventName}/tasks/{taskName}")
-    public ResponseEntity<String> deleteTask(@PathVariable String eventName,
+    public ResponseEntity<Object> deleteTask(@PathVariable String eventName,
                                              @PathVariable String taskName) {
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         taskService.removeTask(event, taskName);
 
-        return new ResponseEntity<String>("Successfully deleted task", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully deleted task");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

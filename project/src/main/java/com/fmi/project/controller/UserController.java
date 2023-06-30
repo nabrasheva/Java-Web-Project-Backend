@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
-//TODO CHANGE FUNCTION NAMES ID -> NAME
 @Slf4j
 @RestController
 @RequestMapping("users")
@@ -25,7 +25,7 @@ public class UserController {
 
     /**
      *
-     * @param email
+     * @param email  email of the user
      * @return userDto object
      */
     @GetMapping("/userInfo/{email}")
@@ -37,22 +37,25 @@ public class UserController {
 
     /**
      *
-     * @param userDto
+     * @param userDto  object, that contains information about the user's request
      * @return response with successfully added user
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> addUser(@RequestBody UserDto userDto){
+    public ResponseEntity<Object> addUser(@RequestBody UserDto userDto){
         User newUser = userMapper.toEntity(userDto);
         userService.addUser(newUser);
 
-        return new ResponseEntity<>("Successfully added user", HttpStatus.OK); //TODO: CHANGE TO JSON FORMAT->VIEW ADD_EVENT
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added user");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param email
-     * @param toUpdateUserDto
-     * @return updated userDto
+     * @param email - email of the user
+     * @param toUpdateUserDto object, that contains information about the user's request
+     * @return updated userDto object, that contains information about the updated user's data (response)
      */
     @PatchMapping("/updateUser/{email}")
     public ResponseEntity<UserDto> updateUser(@PathVariable String email,
@@ -68,15 +71,18 @@ public class UserController {
 
     /**
      *
-     * @param email
+     * @param email email of the user
      * @return response with message for successfully deleted user
      */
     @DeleteMapping("/userInfo/{email}")
-    public ResponseEntity<String> deleteUser(@PathVariable String email){
+    public ResponseEntity<Object> deleteUser(@PathVariable String email){
         User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("The is no such user"));
         userService.deleteUser(user);
 
-        return new ResponseEntity<>("Successfully deleted user", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully deleted user");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
