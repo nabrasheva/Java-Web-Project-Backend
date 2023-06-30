@@ -27,10 +27,10 @@ public class TaskMapper {
                 .description(task.getDescription())
                 .dueDate(task.getDue_date())
                 .status(task.getStatus())
-                .creatorUsername(task.getCreatorUsername())
-                .eventId(task.getEvent().getId())
+                .creatorEmail(task.getCreatorEmail())
+                .eventName(task.getEvent().getName())
                 .assignees(task.getAssignees().stream()
-                            .map(User::getUsername).collect(Collectors.toList()))
+                            .map(User::getEmail).collect(Collectors.toList()))
                 .build();
     }
 
@@ -40,12 +40,12 @@ public class TaskMapper {
                 .description(taskDto.getDescription())
                 .due_date(taskDto.getDueDate())
                 .status(taskDto.getStatus())
-                .creatorUsername(taskDto.getCreatorUsername())
+                .creatorEmail(taskDto.getCreatorEmail())
                 .assignees(taskDto.getAssignees().stream()
-                                .map(userService::findUserByUsername)
+                                .map(userService::findUserByEmail)
                                 .flatMap(Optional::stream)
                                 .collect(Collectors.toSet()))
-                .event(eventService.getEventById(taskDto.getEventId()).orElse(Event.builder().build()))
+                .event(eventService.getEventByName(taskDto.getEventName()).orElse(Event.builder().build()))
                 .build();
     }
 

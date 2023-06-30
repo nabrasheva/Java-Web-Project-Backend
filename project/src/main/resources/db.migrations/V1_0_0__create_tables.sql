@@ -33,7 +33,7 @@ CREATE TABLE event_manager.tasks
     description        VARCHAR(128),
     due_date           DATE NOT NULL,
     status             VARCHAR(16) NOT NULL,
-    creator_username   VARCHAR(32) NOT NULL,
+    creator_email   VARCHAR(64) NOT NULL,
     created_date       TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
     last_modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_DATE,
     event_id           BIGINT      NOT NULL,
@@ -65,3 +65,13 @@ CREATE TABLE event_manager.users_tasks
 
 ALTER TABLE event_manager.events_users
     ADD CONSTRAINT constraint_name UNIQUE (user_id, event_id, role);
+
+ALTER TABLE event_manager.users
+    ADD CONSTRAINT constraint_name1 UNIQUE (email);
+
+
+ALTER TABLE event_manager.events
+    ADD CONSTRAINT constraint_name2 UNIQUE (name);
+
+ALTER TABLE event_manager.tasks
+    ADD CONSTRAINT constraint_name3 UNIQUE (name);

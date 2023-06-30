@@ -36,18 +36,19 @@ public class EventService {
         return eventList;
     }
 
-    public void addEvent(Event event, String username) {
+    public void addEvent(Event event, String email) {
         if (event == null) {
             throw new IllegalArgumentException("Incorrect data");
         }
-        List<Event> eventList = eventRepository.findAll();
-        User newEventCreator = userService.findUserByUsername(username).orElse(null);
 
-        if(newEventCreator == null) throw new ObjectNotFoundException("User do not exist!");
+        List<Event> eventList = eventRepository.findAll();
+        User newEventCreator = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User do not exist!"));
+
         eventList.forEach(event1 -> {
 
-           EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1).orElse(null);
-           if(eventUserForCreator == null) throw new ObjectNotFoundException("EventUser row does not exist!");
+           EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1).orElseThrow(() ->
+                   new ObjectNotFoundException("EventUser row does not exist!"));
+
            User eventCreator = eventUserForCreator.getUser();
 
             if (eventCreator.getId().equals(newEventCreator.getId()) && event.getName().equals(event1.getName())) {
@@ -63,6 +64,7 @@ public class EventService {
                                             .role(Role.ADMIN)
                                             .category(Category.NONE)
                                             .build();
+
         eventUserService.addEventUser(newEventUser);
     }
 
@@ -77,54 +79,48 @@ public class EventService {
         }
     }
 
-    public void updateEventById(Long id, String description, String location, LocalDate date)
+    public Event updateEventById(String name, String description, String location, LocalDate date)
     {
-        Event event = eventRepository.findById(id).orElse(null);
+        Event event = eventRepository.findFirstByName(name).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
-        if (nonNull(event))
-        {
-            if(nonNull(description)) event.setDescription(description);
-            if(nonNull(location)) event.setLocation(location);
-            if(nonNull(date)) event.setDate(date);
+        if(nonNull(description)) event.setDescription(description);
 
-            eventRepository.save(event);
-        }
-        else throw new ObjectNotFoundException("Invalid event!");
+        if(nonNull(location)) event.setLocation(location);
+
+        if(nonNull(date)) event.setDate(date);
+
+        eventRepository.save(event);
+
+        return event;
     }
 
-    public Optional<Event> getEventById(Long id)
+    public Optional<Event> getEventByName(String name)
     {
-        return eventRepository.findById(id);
+        return eventRepository.findFirstByName(name);
     }
-    //........................................................................
-    public Task getTaskByEventIdAndTaskId(Long eventId, Long taskId){
-        Event event1 = eventRepository.findById(eventId).orElse(null);
 
-        if(event1 == null) throw new ObjectNotFoundException("Invalid event!");
+    public Task getTaskByEventNameAndTaskName(String eventName, String taskName){
+        Event event1 = eventRepository.findFirstByName(eventName).orElseThrow(() -> new ObjectNotFoundException("Invalid event!"));
 
         Task task1 = event1.getTasks().stream()
-                                        .filter(task -> task.getId() == taskId)
+                                        .filter(task -> task.getName().equals(taskName))
                                         .findFirst()
-                                        .orElse(null);
-
-        if(task1 == null) throw new ObjectNotFoundException("Invalid task for this event");
+                                        .orElseThrow(() -> new ObjectNotFoundException("Invalid task for this event"));
 
         return task1;
     }
-    //.........................................................................
-    public List<Task> getAllTasksByEvent(Long eventId)
-    {
-        Event event1 = eventRepository.findById(eventId).orElse(null);
 
-        if(event1 == null) throw new ObjectNotFoundException("Invalid event!");
+    public List<Task> getAllTasksByEvent(String name)
+    {
+        Event event1 = eventRepository.findFirstByName(name).orElseThrow(() -> new ObjectNotFoundException("Invalid event!"));
 
         return event1.getTasks().stream().toList();
     }
 
-    public void addUserToEvent(Long event_id, String username, Role role, Category category)
+    public void addUserToEvent(String eventName, String email, Role role, Category category)
     {
-        Event event = eventRepository.findById(event_id).orElse(null);
-        User user = userService.findUserByUsername(username).orElse(null);
+        Event event = eventRepository.findFirstByName(eventName).orElse(null);
+        User user = userService.findUserByEmail(email).orElse(null);
         if(nonNull(event) && nonNull(user))
         {
             EventUser eventUser = eventUserService.findFirstByEventAndUser(event, user).orElse(null);

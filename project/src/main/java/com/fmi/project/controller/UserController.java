@@ -1,7 +1,5 @@
 package com.fmi.project.controller;
 
-
-import com.fmi.project.controller.validation.ApiBadRequest;
 import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
@@ -13,84 +11,78 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("users")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200") //TODO: ADD CORS POLITICS
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
     /**
      *
-     * @param username
+     * @param email  email of the user
      * @return userDto object
      */
-    @GetMapping("/userInfo/{username}")
-    public UserDto getUser(@PathVariable(name = "username") String username) {
-        User user = userService.findUserByUsername(username).orElse(null);
+    @GetMapping("/userInfo/{email}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String email) {
+        User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User does not exist!"));
 
-        if(user == null){
-            throw new ObjectNotFoundException("There is no such user");
-        }
-
-        return userMapper.toDto(user);
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
     }
 
     /**
      *
-     * @param userDto
+     * @param userDto  object, that contains information about the user's request
      * @return response with successfully added user
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> addUser(@RequestBody UserDto userDto){
+    public ResponseEntity<Object> addUser(@RequestBody UserDto userDto){
         User newUser = userMapper.toEntity(userDto);
         userService.addUser(newUser);
 
-        return new ResponseEntity<>("Successfully added user", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully added user");
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      *
-     * @param username
-     * @param toUpdateUserDto
-     * @return updated userDto
+     * @param email - email of the user
+     * @param toUpdateUserDto object, that contains information about the user's request
+     * @return updated userDto object, that contains information about the updated user's data (response)
      */
-    @PatchMapping("/updateUser/{username}")
-    public UserDto updateUser(@PathVariable(name = "username") String username,
+    @PatchMapping("/updateUser/{email}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable String email,
                               @RequestBody UserDto toUpdateUserDto){
 
-        User user = userService.findUserByUsername(username).orElse(null);
+        User user = userService.updateUserByEmail(email,
+                                toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),
+                                toUpdateUserDto.getProfilePictureUrl(), toUpdateUserDto.getDateOfBirth(),
+                                toUpdateUserDto.getAddress());
 
-        if(user == null){
-            throw new ObjectNotFoundException("There is no such user");
-        }
-
-        userService.updateUserById(user.getId(), toUpdateUserDto.getEmail(),
-                                    toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),
-                                    toUpdateUserDto.getProfilePictureUrl(), toUpdateUserDto.getDateOfBirth(),
-                                    toUpdateUserDto.getAddress());
-
-        return userMapper.toDto(user);
+        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
     }
 
     /**
      *
-     * @param username
+     * @param email email of the user
      * @return response with message for successfully deleted user
      */
-    @DeleteMapping("/userInfo/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "username") String username){
-        User user = userService.findUserByUsername(username).orElse(null);
-
-        if(user == null){
-            throw new ObjectNotFoundException("The is no such user");
-        }
-
+    @DeleteMapping("/userInfo/{email}")
+    public ResponseEntity<Object> deleteUser(@PathVariable String email){
+        User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("The is no such user"));
         userService.deleteUser(user);
 
-        return new ResponseEntity<>("Successfully deleted user", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Successfully deleted user");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

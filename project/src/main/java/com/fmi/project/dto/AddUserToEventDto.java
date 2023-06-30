@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddUserToEventDto {
-    @Size(min = 1, max = 32)
-    private String username;
+    @Size(min = 1, max = 64)
+    private String email;
     private Role role;
     private Category category;
 }

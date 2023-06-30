@@ -25,7 +25,7 @@ public class Task {
     @Column(insertable = false, updatable = false, name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @Size(min = 1, max = 32)
     private String name;
 
@@ -42,9 +42,9 @@ public class Task {
     @Size(max = 16)
     private Status status;
 
-    @Column(name = "creator_username", nullable = false)
-    @Size(max = 32)
-    private String creatorUsername;
+    @Column(name = "creator_email", nullable = false)
+    @Size(max = 64)
+    private String creatorEmail;
 
     @ManyToMany()
     @JoinTable(
