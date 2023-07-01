@@ -23,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class ForgotPasswordController {
     private final UserService userService;
     private final EmailSenderService emailSenderService;

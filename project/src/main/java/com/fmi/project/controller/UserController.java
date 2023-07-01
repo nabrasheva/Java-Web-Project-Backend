@@ -1,6 +1,7 @@
 package com.fmi.project.controller;
 
 import com.fmi.project.controller.validation.ObjectNotFoundException;
+import com.fmi.project.dto.UpdateUserDto;
 import com.fmi.project.dto.UserDto;
 import com.fmi.project.mapper.UserMapper;
 import com.fmi.project.model.User;
@@ -35,8 +36,9 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final EmailSenderService emailSenderService;
+    private final JwtService jwtService;
 
-    //TODO: GetMapping for "/verifyEmail/{token}" - that page will contain a message for successful verification and a lint to the login page
+    //TODO: GetMapping for "/verifyEmail/{token}" - that page will contain a message for successful verification and a link to the login page
 
     /**
      *
@@ -57,12 +59,20 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ResponseEntity<Object> addUser(@RequestBody UserDto userDto){
+        //check if userDto.getPassword() == userDto.getConfirmPassword()
+        //check if password is valid based on regex
+        //make endpoint http://localhost:8079/verifyEmail/{token}, in which the user will be added!!!
+
         User newUser = userMapper.toEntity(userDto);
         //newUser.setEnabled(false);
         userService.addUser(newUser);
 
+        String jwtToken = jwtService.generateToken(newUser);
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "Successfully added user");
+        response.put("token", jwtToken);
+
         String subject = "Email verification:";
         String body = "Click here, in order to verify your email: http://localhost:8079/verifyEmail/";
 
@@ -82,7 +92,7 @@ public class UserController {
      */
     @PatchMapping("/updateUser/{email}")
     public ResponseEntity<UserDto> updateUser(@PathVariable String email,
-                              @RequestBody UserDto toUpdateUserDto){
+                              @RequestBody UpdateUserDto toUpdateUserDto){
 
         User user = userService.updateUserByEmail(email,
                                 toUpdateUserDto.getFirstName(), toUpdateUserDto.getLastName(),

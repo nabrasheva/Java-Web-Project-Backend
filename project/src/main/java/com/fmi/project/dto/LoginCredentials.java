@@ -1,6 +1,7 @@
 package com.fmi.project.dto;
 
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginCredentials {
-    @NotBlank(message = "The username is required!")
-    private String username;
+    @Email()
+    @NotBlank(message = "The email is required!")
+    private String email;
     @NotBlank(message = "The password is required!")
     private String password;
 }

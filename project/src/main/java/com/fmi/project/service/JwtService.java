@@ -20,10 +20,9 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
-    private String secret; // = 7dcef4b3f91c14fe3c60698ee6e90e3bb2403ef94672d7679a487d17c94953b3b1cbc1f7c0a19d7b79551d7e6538170fc05839feef096adb72fd39761eedd94c;
-
+    private String secret;
     @Value("${application.security.jwt.expiration}")
-    private long expirationTime;  // = 360000;
+    private long expirationTime;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -49,8 +48,8 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final String email = extractUsername(token);
+        return (email.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token){
@@ -66,7 +65,7 @@ public class JwtService {
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 

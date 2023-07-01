@@ -1,5 +1,6 @@
 package com.fmi.project.service;
 
+import com.fmi.project.controller.validation.ObjectFoundException;
 import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.enums.Status;
 import com.fmi.project.model.Event;
@@ -7,6 +8,7 @@ import com.fmi.project.model.EventUser;
 import com.fmi.project.model.Task;
 import com.fmi.project.model.User;
 import com.fmi.project.repository.TaskRepository;
+import com.fmi.project.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,15 +40,16 @@ public class TaskService {
   //public Optional <Task>
 
   public void addTask(Event event, Task task) {
-    taskRepository.findFirstByName(task.getName()).orElseThrow(() -> new ObjectNotFoundException("Invalid task!"));
+    Task newTask = taskRepository.findFirstByName(task.getName()).orElse(null);
 
     if (event == null || eventService.getEventByName(event.getName()).orElse(null) == null) {
       throw new ObjectNotFoundException("Invalid event");
     }
 
-    event.getTasks().add(task);
-
-    taskRepository.save(task);
+    if(newTask == null) {
+      event.getTasks().add(task);
+      taskRepository.save(task);
+    } else throw new ObjectFoundException("There is already such task!");
   }
 
   public void removeTask(Event event, String taskName) {
@@ -59,10 +62,8 @@ public class TaskService {
 
   }
 
-  public Task updateTaskById(String name, String description, Date due_date, Status status) {
+  public Task updateTaskByName(String name, String description, Date due_date, Status status) {
     Task task = taskRepository.findFirstByName(name).orElseThrow(() -> new ObjectNotFoundException("Invalid task!"));
-
-    if (nonNull(name)) task.setName(name);
 
     if (nonNull(description)) task.setDescription(description);
 
@@ -119,8 +120,14 @@ public class TaskService {
         }
 
         task.getAssignees().add(user);
+        user.getTasks().add(task);
         taskRepository.save(task);
+        //user.getTasks().add(task);
+
+        //userRepository.save(user);
+
       } else throw new ObjectNotFoundException("User is not part of the event or is not a planner!");
+
     } else throw new ObjectNotFoundException("Invalid task or invalid user!");
   }
 

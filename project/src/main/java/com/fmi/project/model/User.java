@@ -104,4 +104,13 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true; //TODO: at first it might be false, because through the email message, the user will verify their email and the account will be enabled and this field will become true
     }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  public String getUserUsername(){
+      return username;
+  }
 }

@@ -39,7 +39,7 @@ public class Task {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Size(max = 16)
+    //@Size(max = 16)
     private Status status;
 
     @Column(name = "creator_email", nullable = false)

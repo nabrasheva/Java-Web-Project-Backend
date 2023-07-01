@@ -16,8 +16,8 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 7dcef4b3f91c14fe3c60698ee6e90e3bb2403ef94672d7679a487d17c94953b3b1cbc1f7c0a19d7b79551d7e6538170fc05839feef096adb72fd39761eedd94c
-      expiration: 3600000
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000
 
 server:
   port: 8079

@@ -1,9 +1,7 @@
 package com.fmi.project.controller;
 
 import com.fmi.project.controller.validation.ObjectNotFoundException;
-import com.fmi.project.dto.AddUserToEventDto;
-import com.fmi.project.dto.EventDto;
-import com.fmi.project.dto.TaskDto;
+import com.fmi.project.dto.*;
 import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
 import com.fmi.project.mapper.TaskMapper;
@@ -176,7 +174,7 @@ public class EventController {
      *
      * @param eventName name of the event
      * @param taskDto request, that contains information about the task, which will be added
-     * @return response, which tell us, that the task is successfully added in the event with eventId
+     * @return response, which tell us, that the task is successfully added in the event with eventName
      */
     @PostMapping("/event/{eventName}/newTask") //TaskDto
     public ResponseEntity<Object> addTaskByEventName(@PathVariable String eventName,
@@ -218,21 +216,22 @@ public class EventController {
      *
      * @param eventName name of the event
      * @param taskName name of the task
-     * @param json request
+     * @param emailDto request
      * @return response with message for successfully added assignee to task with taskId
      */
     @PostMapping("/event/{eventName}/tasks/{taskName}/newAssignee")
     public ResponseEntity<Object> addAssigneeToTask(@PathVariable String eventName,
                                                     @PathVariable String taskName,
-                                                    @RequestBody Map<String, String> json){
+                                                    @RequestBody EmailDto emailDto){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         Task task = eventService.getTaskByEventNameAndTaskName(eventName, taskName);
-        taskService.addAssigneeForTask(taskName, json.get("username"));
+        taskService.addAssigneeForTask(taskName, emailDto.getEmail());
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("message", "Successfully added assignee to task");
+        //response.put("assignees:", task.getAssignees());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -247,7 +246,7 @@ public class EventController {
     public ResponseEntity<EventDto> updateEvent(@PathVariable String eventName,
                                                 @RequestBody EventDto toUpdateEventDto){
 
-        Event event = eventService.updateEventById(eventName, toUpdateEventDto.getDescription(),
+        Event event = eventService.updateEventByName(eventName, toUpdateEventDto.getDescription(),
                 toUpdateEventDto.getLocation(), toUpdateEventDto.getDate());
 
         return new ResponseEntity<>(eventMapper.toDto(event), HttpStatus.OK);
@@ -263,11 +262,11 @@ public class EventController {
     @PatchMapping("/event/{eventName}/tasks/{taskName}")
     public ResponseEntity<TaskDto> updateTask(@PathVariable String eventName,
                               @PathVariable String taskName,
-                              @RequestBody TaskDto toUpdateTaskDto){
+                              @RequestBody UpdateTaskDto toUpdateTaskDto){
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
-        Task task = taskService.updateTaskById(taskName, toUpdateTaskDto.getDescription(),
+        Task task = taskService.updateTaskByName(taskName, toUpdateTaskDto.getDescription(),
                                     toUpdateTaskDto.getDueDate(), toUpdateTaskDto.getStatus());
 
         return new ResponseEntity<>(taskMapper.toDto(task), HttpStatus.OK);
@@ -281,6 +280,7 @@ public class EventController {
     @DeleteMapping("/event/{eventName}")
     public ResponseEntity<Object> deleteEvent(@PathVariable String eventName){
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
+
         eventService.deleteEvent(event);
 
         Map<String, String> response = new HashMap<>();

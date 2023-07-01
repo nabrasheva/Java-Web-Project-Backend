@@ -1,5 +1,6 @@
 package com.fmi.project.service;
 
+import com.fmi.project.controller.validation.ObjectFoundException;
 import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
@@ -52,7 +53,7 @@ public class EventService {
            User eventCreator = eventUserForCreator.getUser();
 
             if (eventCreator.getId().equals(newEventCreator.getId()) && event.getName().equals(event1.getName())) {
-                throw new ObjectNotFoundException("Event already exists!");
+                throw new ObjectFoundException("Event already exists!");
             }
         });
 
@@ -79,7 +80,7 @@ public class EventService {
         }
     }
 
-    public Event updateEventById(String name, String description, String location, LocalDate date)
+    public Event updateEventByName(String name, String description, String location, LocalDate date)
     {
         Event event = eventRepository.findFirstByName(name).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
@@ -94,8 +95,7 @@ public class EventService {
         return event;
     }
 
-    public Optional<Event> getEventByName(String name)
-    {
+    public Optional<Event> getEventByName(String name) {
         return eventRepository.findFirstByName(name);
     }
 
@@ -121,10 +121,11 @@ public class EventService {
     {
         Event event = eventRepository.findFirstByName(eventName).orElse(null);
         User user = userService.findUserByEmail(email).orElse(null);
+
         if(nonNull(event) && nonNull(user))
         {
             EventUser eventUser = eventUserService.findFirstByEventAndUser(event, user).orElse(null);
-            if(nonNull(eventUser)) throw new ObjectNotFoundException("User is already added to event!");
+            if(nonNull(eventUser)) throw new ObjectFoundException("User is already added to event!");
             EventUser createdEventUser;
             if(role == Role.GUEST)
             {

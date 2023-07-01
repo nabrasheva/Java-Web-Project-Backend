@@ -1,5 +1,6 @@
 package com.fmi.project.controller;
 
+import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.LoginCredentials;
 import com.fmi.project.model.User;
 import com.fmi.project.service.JwtService;
@@ -14,15 +15,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
@@ -54,8 +56,8 @@ public class AuthController {
 //    }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginCredentials loginCredentials, BindingResult bindingResult){
-        if(bindingResult.hasErrors()) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginCredentials loginCredentials){//, BindingResult bindingResult){
+        /*if(bindingResult.hasErrors()) {
             StringBuilder messages = new StringBuilder();
 
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -63,19 +65,31 @@ public class AuthController {
             }
 
             return ResponseEntity.badRequest().body(messages.toString());
-        }
+        }*/
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginCredentials.getUsername(),
+                loginCredentials.getEmail(),
                 loginCredentials.getPassword()
         ));
 
-        User user = userService.findUserByUsername(loginCredentials.getUsername()).
-                    orElseThrow(() -> new UsernameNotFoundException("There is no such user"));
+        User user = userService.findUserByEmail(loginCredentials.getEmail()).
+                    orElseThrow(() -> new ObjectNotFoundException("User is not found!"));
 
-        String token = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
 
-        return new ResponseEntity<String>("Successfully logged. Token: " + token, HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwtToken);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<Object> authenticate(@RequestBody LoginCredentials loginCredentials){
+//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                loginCredentials.getEmail(),
+//                loginCredentials.getPassword()
+//        ));
+//
+//    }
 
 }
