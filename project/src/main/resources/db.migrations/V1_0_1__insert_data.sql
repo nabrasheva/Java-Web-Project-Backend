@@ -18,6 +18,6 @@ insert into event_manager.events_users (role, category, user_id, event_id, creat
 insert into event_manager.events_users (role, category, user_id, event_id, created_date, last_modified_date) values ('ADMIN', null, 2, 3, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 insert into event_manager.events_users (role, category, user_id, event_id, created_date, last_modified_date) values ('ADMIN', null, 1, 2, '2023-05-29 00:00:00.000000', '2023-05-29 00:00:00.000000');
 
-insert into event_manager.users_tasks (task_id, user_id) values (1, 1);
-insert into event_manager.users_tasks (task_id, user_id) values (2, 1);
-insert into event_manager.users_tasks (task_id, user_id) values (3, 2);
+--insert into event_manager.users_tasks (user_id, task_id) values (1, 1);
+--insert into event_manager.users_tasks (user_id, task_id) values (1, 2);
+--insert into event_manager.users_tasks (user_id, task_id) values (2, 3);

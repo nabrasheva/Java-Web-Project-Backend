@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -46,13 +47,16 @@ public class Task {
     @Size(max = 64)
     private String creatorEmail;
 
-    @ManyToMany()
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "users_tasks",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id")
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> assignees;
+    private Set<User> assignees = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="event_id", nullable=false)
@@ -65,4 +69,29 @@ public class Task {
     @Column(name = "last_modified_date", nullable = false)
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
+
+    public void addUser(User user) {
+        assignees.add(user);
+        user.getTasks().add(this);
+    }
+
+    public void removeUser(User user) {
+        assignees.remove(user);
+        user.getTasks().remove(this);
+    }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o)
+//            return true;
+//
+//        if (!(o instanceof Task)) return false;
+//
+//        return id != null && id.equals(((Task) o).getId());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }

@@ -119,12 +119,8 @@ public class TaskService {
           throw new ObjectNotFoundException("User is already assigned to task");
         }
 
-        task.getAssignees().add(user);
-        user.getTasks().add(task);
+        task.addUser(user);
         taskRepository.save(task);
-        //user.getTasks().add(task);
-
-        //userRepository.save(user);
 
       } else throw new ObjectNotFoundException("User is not part of the event or is not a planner!");
 

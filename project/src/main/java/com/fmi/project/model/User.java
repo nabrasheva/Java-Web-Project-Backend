@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,8 +64,8 @@ public class User implements UserDetails {
   @Size(max = 64)
   private String address;
 
-  @ManyToMany(mappedBy = "assignees", cascade = CascadeType.REMOVE)
-  private Set<Task> tasks;
+  @ManyToMany(mappedBy = "assignees")//, cascade = CascadeType.REMOVE)
+  private Set<Task> tasks = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<EventUser> eventUsers;

@@ -52,16 +52,16 @@ CREATE TABLE event_manager.events_users
     FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES event_manager.events (id) ON DELETE CASCADE
 );
-
+/*
 CREATE TABLE event_manager.users_tasks
 (
-    task_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    PRIMARY KEY (task_id, user_id),
-    FOREIGN KEY (task_id) REFERENCES event_manager.tasks (id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON DELETE CASCADE
+    task_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, task_id),
+    FOREIGN KEY (user_id) REFERENCES event_manager.users (id) ON DELETE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES event_manager.tasks (id) ON DELETE CASCADE
 
-);
+);*/
 
 ALTER TABLE event_manager.events_users
     ADD CONSTRAINT constraint_name UNIQUE (user_id, event_id, role);
