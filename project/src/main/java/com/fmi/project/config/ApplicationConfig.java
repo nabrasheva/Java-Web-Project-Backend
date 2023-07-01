@@ -50,22 +50,4 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*@Bean
-    public JavaMailSender javaMailSender(){
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
-        mailSender.setUsername("fn72039@g.fmi.uni-sofia.bg");
-        mailSender.setPassword("..."); //TODO get the password from gmail acc, so the app to use your email to send messages, put the password here and in the application.yml!!!
-
-        Properties prop = mailSender.getJavaMailProperties();
-        prop.put("mail.transport.protocol", "smtp");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
-        prop.put("mail.debug", "true");
-
-        return mailSender;
-    }*/
-
 }

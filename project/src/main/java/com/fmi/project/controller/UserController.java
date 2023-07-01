@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("users")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200") //TODO: ADD CORS POLITICS
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -80,9 +80,12 @@ public class UserController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
-        //return new ResponseEntity<String>("Successfully added user. Please, check you email for verification.",
-         //                                   HttpStatus.OK);
     }
+
+    //@PostMapping("/verifyEmail/{token}") ->
+    // TODO trqbva da proverq dali tozi token na kogo prinadleji i dali ne e iztekul: 1)da se sloji kolona v tablicata za User, verifyToken i expiration ili da se naprabvi nova tablica s vunshen kluch kum user-a. Podobno trqbwa da se naprawi i za promqna na parola
+
+
 
     /**
      *

@@ -22,10 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO: CREATETASKDTO & CREATEEVENTDTO - BEZ ID
-//TODO: EVENTDTO & TASKDTO - ADD ID
-//TODO: CREATEUSERDTO - BEZ ID ; USERSTO - ID - moje bi trqbva username da e unikalno
-//TODO: getAllEvents - Map, HASHMAP with keys -roles and valus - List<Event>
+
 
 
 @Slf4j
