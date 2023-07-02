@@ -37,8 +37,6 @@ public class TaskService {
     return taskRepository.findById(taskId);
   }
 
-  //public Optional <Task>
-
   public void addTask(Event event, Task task) {
     Task newTask = taskRepository.findFirstByName(task.getName()).orElse(null);
 
@@ -95,11 +93,6 @@ public class TaskService {
         .map(User::getEmail)
         .collect(Collectors.toList());
   }
-
-//    public List<Task> getTasksByAssignee(User user) {
-//        Set<User> assignees =
-//        return taskRepository.findByAssignees(user);
-//    }
 
   public List<Task> getTasksByAdmin(String email) {
     return taskRepository.findByCreatorEmail(email);

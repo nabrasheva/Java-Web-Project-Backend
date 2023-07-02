@@ -22,9 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-
 @Slf4j
 @RestController
 @RequestMapping("/events")
@@ -74,12 +71,7 @@ public class EventController {
     public ResponseEntity<Object> getAllTasksByEmail(@PathVariable String email){
         User user = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User does not exist!"));
 
-//        List<Task> assignedTasks = taskService.getTasksByAssignee(user);
         List<Task> adminTasks = taskService.getTasksByAdmin(email);
-
-//        List<Task> allTasks = Stream.concat(assignedTasks.stream(), adminTasks.stream())
-//                .distinct()
-//                .collect(Collectors.toList());
 
         List<Event> userPlannerEvents = eventService.getEventsByRoleAndUser(Role.PLANNER, user);
         List<Task> assignedTasks = userPlannerEvents.stream()
@@ -147,7 +139,10 @@ public class EventController {
 
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event!"));
 
-        return new ResponseEntity<>(taskService.getAssigneesByTaskName(taskName), HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+        response.put("assignees", taskService.getAssigneesByTaskName(taskName));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -228,7 +223,6 @@ public class EventController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Successfully added assignee to task");
-        //response.put("assignees:", task.getAssignees());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

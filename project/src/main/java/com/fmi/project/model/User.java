@@ -64,7 +64,7 @@ public class User implements UserDetails {
   @Size(max = 64)
   private String address;
 
-  @ManyToMany(mappedBy = "assignees")//, cascade = CascadeType.REMOVE)
+  @ManyToMany(mappedBy = "assignees", cascade = CascadeType.REMOVE)
   private Set<Task> tasks = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
