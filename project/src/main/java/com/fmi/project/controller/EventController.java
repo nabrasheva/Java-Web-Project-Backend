@@ -177,6 +177,10 @@ public class EventController {
         Task newTask = taskMapper.toEntity(taskDto);
         taskService.addTask(event, newTask);
 
+        taskDto.getAssignees().forEach(assigneeEmail->{
+            taskService.addAssigneeForTask(newTask.getName(),assigneeEmail);
+        });
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "Successfully added task");
 
@@ -258,7 +262,7 @@ public class EventController {
         Event event = eventService.getEventByName(eventName).orElseThrow(() -> new ObjectNotFoundException("There is no such event"));
 
         Task task = taskService.updateTaskByName(taskName, toUpdateTaskDto.getDescription(),
-                                    toUpdateTaskDto.getDueDate(), toUpdateTaskDto.getStatus());
+                                    toUpdateTaskDto.getDueDate(), toUpdateTaskDto.getStatus(), toUpdateTaskDto.getAssignees());
 
         return new ResponseEntity<>(taskMapper.toDto(task), HttpStatus.OK);
     }

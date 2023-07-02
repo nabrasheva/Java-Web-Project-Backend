@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,4 +22,6 @@ public class UpdateTaskDto {
     private Date dueDate;
     //@Size(max = 16)
     private Status status;
+    private List<String> assignees;
+
 }
