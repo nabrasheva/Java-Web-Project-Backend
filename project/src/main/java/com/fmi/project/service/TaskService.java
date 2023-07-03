@@ -26,22 +26,22 @@ import static java.util.Objects.nonNull;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final EventService eventService;
+    //private final EventService eventService;
     private final EventUserService eventUserService;
     private final UserService userService;
 
-    public List<Task> getAllTasksByEventId(Event event) {
-        return taskRepository.findAllByEvent(event);
-    }
-
-    public Optional<Task> findByTaskId(long taskId) {
-        return taskRepository.findById(taskId);
-    }
+//    public List<Task> getAllTasksByEventId(Event event) {
+//        return taskRepository.findAllByEvent(event);
+//    }
+//
+//    public Optional<Task> findByTaskId(long taskId) {
+//        return taskRepository.findById(taskId);
+//    }
 
     public void addTask(Event event, Task task) {
         Task newTask = taskRepository.findFirstByName(task.getName()).orElse(null);
 
-        if (event == null || eventService.getEventByName(event.getName()).orElse(null) == null) {
+        if (event == null) {
             throw new ObjectNotFoundException("Invalid event");
         }
 
