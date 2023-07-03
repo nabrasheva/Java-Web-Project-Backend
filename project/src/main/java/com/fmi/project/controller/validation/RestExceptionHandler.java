@@ -28,6 +28,12 @@ public class RestExceptionHandler {
     return new ResponseEntity<>(Map.of(ERROR_MESSAGE, exception.getMessage()), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler({ObjectFoundException.class})
+  public ResponseEntity<Map<String, String>> handleObjectFoundException(ObjectFoundException exception) {
+    log.error(EXCEPTION_MESSAGE, exception.getMessage());
+    return new ResponseEntity<>(Map.of(ERROR_MESSAGE, exception.getMessage()), HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler({JsonProcessingException.class, HttpMessageConversionException.class})
   public ResponseEntity<Map<String, String>> handleBadRequestException(final Exception ex) {
     log.error(EXCEPTION_MESSAGE, ex.getMessage());

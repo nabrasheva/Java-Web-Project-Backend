@@ -1,18 +1,28 @@
 {
 	"info": {
-		"_postman_id": "f2c2b27b-3f06-43c2-b3be-68630a185fc3",
+		"_postman_id": "49a52c34-725c-43c5-b91c-1a97bca57de0",
 		"name": "EventPlanningAndColaborationToolProject",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26779097"
 	},
 	"item": [
 		{
-			"name": "getUserByUsername",
+			"name": "getUserByEmail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/users/userInfo/Georgi",
+					"raw": "http://localhost:8079/users/userInfo/georgitce293@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -21,19 +31,29 @@
 					"path": [
 						"users",
 						"userInfo",
-						"Georgi"
+						"georgitce293@gmail.com"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "getEventByEventId",
+			"name": "getEventByEventName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/1",
+					"raw": "http://localhost:8079/events/event/Baptism",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -42,19 +62,29 @@
 					"path": [
 						"events",
 						"event",
-						"1"
+						"Baptism"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "getAllEventsByUsername",
+			"name": "getAllEventsByEmail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE1NjY3NSwiZXhwIjoxNjg4MjQzMDc1fQ.fah6jYKhaa49RRNnsBpE3RKXGE0qCqbNnfquhoYFV50",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/Tsvetina",
+					"raw": "http://localhost:8079/events/tsvetina@test.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -62,19 +92,29 @@
 					"port": "8079",
 					"path": [
 						"events",
-						"Tsvetina"
+						"tsvetina@test.com"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "getAllTasksByUsername",
+			"name": "getAllTasksByEmail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE1NjY3NSwiZXhwIjoxNjg4MjQzMDc1fQ.fah6jYKhaa49RRNnsBpE3RKXGE0qCqbNnfquhoYFV50",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/Niya123/tasks",
+					"raw": "http://localhost:8079/events/niya@test.com/tasks",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -82,7 +122,7 @@
 					"port": "8079",
 					"path": [
 						"events",
-						"Niya123",
+						"niya@test.com",
 						"tasks"
 					]
 				}
@@ -90,12 +130,22 @@
 			"response": []
 		},
 		{
-			"name": "getAllTasksByEventId",
+			"name": "getAllTasksByEventName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/1/tasks",
+					"raw": "http://localhost:8079/events/event/Wedding/tasks",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -104,7 +154,7 @@
 					"path": [
 						"events",
 						"event",
-						"1",
+						"Wedding",
 						"tasks"
 					]
 				}
@@ -112,12 +162,22 @@
 			"response": []
 		},
 		{
-			"name": "getTaskByEventIdAndTaskId",
+			"name": "getTaskByEventNameAndTaskName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/1/tasks/1",
+					"raw": "http://localhost:8079/events/event/Wedding/tasks/Order%20flowers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -126,21 +186,31 @@
 					"path": [
 						"events",
 						"event",
-						"1",
+						"Wedding",
 						"tasks",
-						"1"
+						"Order%20flowers"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "getAssigneesByTaskId",
+			"name": "getAssigneesByTaskName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE2MzE5NiwiZXhwIjoxNjg4MjQ5NTk2fQ.88WOkq5NDjzN-_ER45kfC6yFool38pVh53DEUIjVEv4",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/1/tasks/1/assignees",
+					"raw": "http://localhost:8079/events/event/Graduation/tasks/Invite%20guests/assignees",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -149,10 +219,48 @@
 					"path": [
 						"events",
 						"event",
-						"1",
+						"Graduation",
 						"tasks",
-						"1",
+						"Invite%20guests",
 						"assignees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"goshotrepacha659@gmail.com\",\r\n    \"password\": \"123bgdf3feFef\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8079/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8079",
+					"path": [
+						"login"
 					]
 				}
 			},
@@ -165,7 +273,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"Georgi123\",\r\n    \"email\":\"georgi123@tset.com\",\r\n    \"password\":\"123bgdf3fefef\",\r\n    \"confirm_password\": \"123bgdf3fefef\",\r\n    \"first_name\": \"Georgi\",\r\n    \"last_name\": \"Tsekov\",\r\n    \"profile_picture_url\": null,\r\n    \"date_of_birth\": \"2001-06-23\",\r\n    \"address\": \"Sofia\"\r\n}",
+					"raw": "{\r\n    \"username\":\"Georgiii\",\r\n    \"email\":\"goshotrepacha659@gmail.com\",\r\n    \"password\":\"123bgdf3feFef\",\r\n    \"confirm_password\": \"123bgdf3feFef\",\r\n    \"firstName\": \"Georgi\",\r\n    \"lastName\": \"Tse\",\r\n    \"profile_picture_url\": null,\r\n    \"dateOfBirth\": \"2001-06-23\",\r\n    \"address\": \"Sofia\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -188,13 +296,23 @@
 			"response": []
 		},
 		{
-			"name": "addTaskByEventId",
+			"name": "addTaskByEventName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE1NjY3NSwiZXhwIjoxNjg4MjQzMDc1fQ.fah6jYKhaa49RRNnsBpE3RKXGE0qCqbNnfquhoYFV50",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Make a decoration\",\r\n    \"description\": \"abv\",\r\n    \"due_date\": \"2023-06-14\",\r\n    \"status\": \"TO_DO\",\r\n    \"creator_username\": \"Georgi\",\r\n    \"event_id\": \"3\",\r\n    \"assignees\": []\r\n}",
+					"raw": "{\r\n    \"name\": \"Graduation party with colleagues\",\r\n    \"description\": \"abv\",\r\n    \"dueDate\": \"2023-07-15\",\r\n    \"status\": \"TO_DO\",\r\n    \"creatorEmail\": \"georgi@test.com\",\r\n    \"eventName\": \"Graduation\",\r\n    \"assignees\": []\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -202,7 +320,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/event/3/newTask",
+					"raw": "http://localhost:8079/events/event/Graduation/newTask",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -211,7 +329,7 @@
 					"path": [
 						"events",
 						"event",
-						"3",
+						"Graduation",
 						"newTask"
 					]
 				}
@@ -221,11 +339,21 @@
 		{
 			"name": "addEvent",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Bаptism\",\r\n    \"date\": \"2023-06-02\",\r\n    \"location\": \"Sofia\",\r\n    \"description\": \"abc\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Bаptism\",\r\n    \"date\": \"2023-08-08\",\r\n    \"location\": \"Sofia\",\r\n    \"description\": \"abc\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -233,7 +361,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/newEvent",
+					"raw": "http://localhost:8079/events/newEvent/tsvetina@test.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -241,7 +369,8 @@
 					"port": "8079",
 					"path": [
 						"events",
-						"newEvent"
+						"newEvent",
+						"tsvetina@test.com"
 					]
 				}
 			},
@@ -250,11 +379,21 @@
 		{
 			"name": "addUserToEvent",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE1NjY3NSwiZXhwIjoxNjg4MjQzMDc1fQ.fah6jYKhaa49RRNnsBpE3RKXGE0qCqbNnfquhoYFV50",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Niya123\",\r\n    \"role\": \"PLANNER\"\r\n}",
+					"raw": "{\r\n    \"email\": \"goshotrepacha659@gmail.com\",\r\n    \"role\": \"GUEST\",\r\n    \"category\": \"FRIENDS\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -262,7 +401,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/event/2/newUser",
+					"raw": "http://localhost:8079/events/event/Graduation/newUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -271,7 +410,7 @@
 					"path": [
 						"events",
 						"event",
-						"2",
+						"Graduation",
 						"newUser"
 					]
 				}
@@ -281,11 +420,21 @@
 		{
 			"name": "addAssigneeToTask",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnb3Nob3RyZXBhY2hhNjU5QGdtYWlsLmNvbSIsImlhdCI6MTY4ODE2MzE5NiwiZXhwIjoxNjg4MjQ5NTk2fQ.88WOkq5NDjzN-_ER45kfC6yFool38pVh53DEUIjVEv4",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Tsvetina\"\r\n}\r\n",
+					"raw": "{\r\n    \"email\": \"tsvetina@test.com\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -293,7 +442,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/event/2/tasks/3/newAssignee",
+					"raw": "http://localhost:8079/events/event/Graduation/tasks/Graduation%20party%20with%20colleagues/newAssignee",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -302,9 +451,9 @@
 					"path": [
 						"events",
 						"event",
-						"2",
+						"Graduation",
 						"tasks",
-						"3",
+						"Graduation%20party%20with%20colleagues",
 						"newAssignee"
 					]
 				}
@@ -312,13 +461,23 @@
 			"response": []
 		},
 		{
-			"name": "updateUserByUsername",
+			"name": "updateUserByEmail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"first_name\": \"Gosho\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Gosho\",\r\n    \"lastName\": \"Tsekov\",\r\n    \"dateOfBirth\": \"2001-06-23\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -326,7 +485,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/users/updateUser/Georgi123",
+					"raw": "http://localhost:8079/users/updateUser/georgi@test.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -335,20 +494,30 @@
 					"path": [
 						"users",
 						"updateUser",
-						"Georgi123"
+						"georgi@test.com"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "updateEventByEventId",
+			"name": "updateEventByEventName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-06-20\",\r\n    \"location\": \"Marinela Sofia\",\r\n    \"description\": \"nothing more to add\"\r\n}",
+					"raw": "{\r\n    \"date\": \"2023-07-25\",\r\n    \"location\": \"Sofia\",\r\n    \"description\": \"Baptism preparation\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -356,7 +525,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/event/1",
+					"raw": "http://localhost:8079/events/event/Baptism",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -365,20 +534,30 @@
 					"path": [
 						"events",
 						"event",
-						"1"
+						"Baptism"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "updateTicketByEventIdAndTaskId",
+			"name": "updateTicketByEventNameAndTaskName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"status\": \"DONE\"\r\n}",
+					"raw": "{\r\n    \"description\": \"test1\",\r\n    \"dueDate\": \"2023-07-02\",\r\n    \"status\": \"DONE\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -386,7 +565,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8079/events/event/1/tasks/2",
+					"raw": "http://localhost:8079/events/event/Wedding/tasks/Invite%20guests",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -395,21 +574,31 @@
 					"path": [
 						"events",
 						"event",
-						"1",
+						"Wedding",
 						"tasks",
-						"2"
+						"Invite%20guests"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "deleteEventByEventId",
+			"name": "deleteEventByEventName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/5",
+					"raw": "http://localhost:8079/events/event/Baptism",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -418,19 +607,29 @@
 					"path": [
 						"events",
 						"event",
-						"5"
+						"Baptism"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "deleteTaskByEventIdAdnTaskId",
+			"name": "deleteTaskByEventNameAdnTaskName",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/events/event/3/tasks/6",
+					"raw": "http://localhost:8079/events/event/Graduation/tasks/Graduation%20party%20with%20colleagues",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -439,21 +638,31 @@
 					"path": [
 						"events",
 						"event",
-						"3",
+						"Graduation",
 						"tasks",
-						"6"
+						"Graduation%20party%20with%20colleagues"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "deleteUserById",
+			"name": "deleteUserByEmail",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZW9yZ2l0Y2UyOTNAZ21haWwuY29tIiwiaWF0IjoxNjg4MTUzMDg4LCJleHAiOjE2ODgyMzk0ODh9.MlEvlPuBFq3FknO5nGFvQndjSi6fnmFnkUrTsTuTVV8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8079/users/userInfo/Georgi123",
+					"raw": "http://localhost:8079/users/userInfo/goshotrepacha659@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -462,7 +671,7 @@
 					"path": [
 						"users",
 						"userInfo",
-						"Georgi123"
+						"goshotrepacha659@gmail.com"
 					]
 				}
 			},

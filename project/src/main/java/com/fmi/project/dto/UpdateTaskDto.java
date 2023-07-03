@@ -15,17 +15,13 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDto {
-  @Size(min = 1, max = 32)
-  private String name;
-  @Size(max = 128)
-  private String description;
-  @Future
-  private Date dueDate;
-  //@Size(max = 16)
-  private Status status;
-  @Size(max = 64)
-  private String creatorEmail;
-  private String eventName;
-  private List<String> assignees;
+public class UpdateTaskDto {
+    @Size(max = 128)
+    private String description;
+    @Future
+    private Date dueDate;
+    //@Size(max = 16)
+    private Status status;
+    private List<String> assignees;
+
 }

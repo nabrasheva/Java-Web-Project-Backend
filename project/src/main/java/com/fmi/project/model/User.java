@@ -7,9 +7,15 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +25,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
+//TODO: add private field called "enabled" of type boolean, in order to see if the user's account is enabled
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +65,7 @@ public class User {
   private String address;
 
   @ManyToMany(mappedBy = "assignees", cascade = CascadeType.REMOVE)
-  private Set<Task> tasks;
+  private Set<Task> tasks = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<EventUser> eventUsers;
@@ -67,7 +74,44 @@ public class User {
   @CreationTimestamp
   private Timestamp createdDate;
 
-  @Column(name = "last_modified_date", nullable = false)
-  @UpdateTimestamp
-  private Timestamp lastModifiedDate;
+    @Column(name = "last_modified_date", nullable = false)
+    @UpdateTimestamp
+    private Timestamp last_modified_date;
+
+    //@Enumerated(EnumType.STRING)
+    //private UserAuthRole userAuthRole;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; //TODO: at first it might be false, because through the email message, the user will verify their email and the account will be enabled and this field will become true
+    }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  public String getUserUsername(){
+      return username;
+  }
 }
