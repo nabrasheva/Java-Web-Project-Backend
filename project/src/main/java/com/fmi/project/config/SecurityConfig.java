@@ -30,7 +30,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/users/signup").permitAll();
                     auth.requestMatchers("/sendPasswordResetEmail").permitAll();
                     auth.requestMatchers("/resetPassword/**").permitAll();
-                    auth.requestMatchers("/verifyEmail/**").permitAll();
+                    auth.requestMatchers("/users/verifyEmail/**").permitAll();
                     auth.anyRequest().authenticated(); })
                 //.formLogin(Customizer.withDefaults())
                 .sessionManagement(session -> session

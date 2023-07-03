@@ -15,9 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -29,60 +27,39 @@ public class ForgotPasswordController {
     private final EmailSenderService emailSenderService;
 
     @PostMapping("/sendPasswordResetEmail")
-    public ResponseEntity<String> sendPasswordResetEmail(@Valid @RequestBody EmailDto emailDto, BindingResult bindingResult){
+    public ResponseEntity<Object> sendPasswordResetEmail(@Valid @RequestBody EmailDto emailDto){
 
-        if(bindingResult.hasErrors()) {
-            String message = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
-
-            return ResponseEntity.badRequest().body(message);
-        }
+        Map<String, String> response = new HashMap<>();
 
         Optional<User> user = userService.findUserByEmail(emailDto.getEmail());
+
         if(user.isEmpty()){
-            return new ResponseEntity<String>("User with this provided email is not found", HttpStatus.NOT_FOUND);
+            response.put("message", "User with this provided email is not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         String subject = "Password reset:";
-        String body = "Click here, in order to reset your password: http://localhost:8079/resetPassword/";
+        String body = "Click here, in order to reset your password: http://localhost:8079/resetPassword/" + emailDto.getEmail();
 
         emailSenderService.sendEmail(emailDto.getEmail(), subject, body);
 
-        return new ResponseEntity<String>("Email for resetting your password is sent. Please, check your email",
-                                            HttpStatus.OK);
+        response.put("message", "Email for resetting your password is sent. Please, check your email");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/resetPassword/{token}")
-    public ResponseEntity<String> resetPassword(@PathVariable String token, @Valid @RequestBody PasswordDto passwordDto,
-                                                BindingResult bindingResult) {
+    @PatchMapping("/resetPassword/{email}")
+    public ResponseEntity<Object> resetPassword(@PathVariable String email, @Valid @RequestBody PasswordDto passwordDto) {
 
-        //Optional<User> user = userService.findUserByResetToken(token);
-        //if(user.isEmpty()){
-        //  return new ResponseEntity<String>("There is no user with this token", HttpStatus.UNAUTHORIZED);
-        //}
-        //else{
-        //  if(user.getResetPasswordExpires() < LocalDateTime.now()){
-        //      return new ResponseEntity<String>("The token has expired", HttpStatus.UNAUTHORIZED);
-        //  }
-        //}
+        boolean isPasswordReset = userService.updateUserPassword(email, passwordDto.getPassword(), passwordDto.getConfirm_password());
+        Map<String, String> response = new HashMap<>();
 
-        if(bindingResult.hasErrors()){
-            StringBuilder messages = new StringBuilder();
-
-            for(FieldError error : bindingResult.getFieldErrors()){
-                messages.append(error.getDefaultMessage()).append("; ");
-            }
-
-            return ResponseEntity.badRequest().body(messages.toString());
+        if(!isPasswordReset){
+            response.put("message", "The password field and confirm password field must be equal");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else{
+            response.put("message", "Password updated successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-
-        if(!passwordDto.getPassword().equals(passwordDto.getConfirm_password())){
-            return new ResponseEntity<String>("The password field and confirm password field must be equal", HttpStatus.BAD_REQUEST);
-        }
-
-        //User thisUser = user.get();
-        //userService.updateUserPassword(thisUser, passwordDto.getPassword());
-
-        return new ResponseEntity<String>("Password updated successfully", HttpStatus.OK);
-        //then, redirect to the login page
     }
 }
