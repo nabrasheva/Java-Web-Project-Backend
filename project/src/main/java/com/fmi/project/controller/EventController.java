@@ -4,11 +4,14 @@ import com.fmi.project.controller.validation.ObjectNotFoundException;
 import com.fmi.project.dto.*;
 import com.fmi.project.enums.Role;
 import com.fmi.project.mapper.EventMapper;
+import com.fmi.project.mapper.EventUserMapper;
 import com.fmi.project.mapper.TaskMapper;
 import com.fmi.project.model.Event;
+import com.fmi.project.model.EventUser;
 import com.fmi.project.model.Task;
 import com.fmi.project.model.User;
 import com.fmi.project.service.EventService;
+import com.fmi.project.service.EventUserService;
 import com.fmi.project.service.TaskService;
 import com.fmi.project.service.UserService;
 import lombok.AllArgsConstructor;
@@ -17,10 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -37,10 +37,36 @@ public class EventController {
 
     private final UserService userService;
 
+    private final EventUserService eventUserService;
+
+    private final EventUserMapper eventUserMapper;
+
     //TODO: @DeleteMapping to remove a user from event eventId
 
     //TODO: @DeleteMapping to remove an assignee from task with taskId
 
+    /**
+     *   @param     eventName name of event
+     *   @param     role role of the user
+     *
+     *   @return    list of all planners or guests for one event
+     */
+    @GetMapping("event/{eventName}/roles/{role}")
+    public ResponseEntity<Object> getUsersByEventAndRole(@PathVariable String eventName, @PathVariable String role)
+    {
+        Event event = eventService.getEventByName(eventName).orElseThrow(()->new ObjectNotFoundException("No such event!"));
+       List<EventUser> eventUsers;
+        if(Objects.equals(role, "planner"))
+        {
+           eventUsers = eventUserService.findEventUserByEventAndRole(event, Role.PLANNER) ;
+        } else if (Objects.equals(role, "guest")) {
+            eventUsers = eventUserService.findEventUserByEventAndRole(event, Role.GUEST) ;
+        }
+        else throw new ObjectNotFoundException("Could not find such role!");
+
+
+        return new ResponseEntity<>(eventUserMapper.toDtoCollection(eventUsers), HttpStatus.OK);
+    }
     /**
      *   @param     email email of the user
      *   @return    all events, in which the user with this username participate
@@ -177,9 +203,9 @@ public class EventController {
         Task newTask = taskMapper.toEntity(taskDto);
         taskService.addTask(event, newTask);
 
-        taskDto.getAssignees().forEach(assigneeEmail->{
-            taskService.addAssigneeForTask(newTask.getName(),assigneeEmail);
-        });
+//        taskDto.getAssignees().forEach(assigneeEmail->{
+//            taskService.addAssigneeForTask(newTask.getName(),assigneeEmail);
+//        });
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Successfully added task");

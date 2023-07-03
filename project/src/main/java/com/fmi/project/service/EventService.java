@@ -69,6 +69,7 @@ public class EventService {
         eventUserService.addEventUser(newEventUser);
     }
 
+
     public void deleteEvent(Event event) {
         if (event == null) {
             throw new IllegalArgumentException("Incorrect data");

@@ -70,14 +70,15 @@ public class TaskService {
 
         if (nonNull(status)) task.setStatus(status);
 
-        Set<User> userSet = assignees.stream().map(email -> {
-            User user = userService.findUserByEmail(email).orElse(null);
-            EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
-            if(nonNull(eventUser)) return user;
-            else throw new ObjectNotFoundException("User is not part of the event or is not a planner!");
-        }).collect(Collectors.toSet());
-
-        if (!assignees.isEmpty()) task.setAssignees(userSet);
+        if (assignees != null && !assignees.isEmpty()){
+            Set<User> userSet = assignees.stream().map(email -> {
+                User user = userService.findUserByEmail(email).orElse(null);
+                EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
+                if(nonNull(eventUser)) return user;
+                else throw new ObjectNotFoundException("User is not part of the event or is not a planner!");
+            }).collect(Collectors.toSet());
+            task.setAssignees(userSet);
+        }
 
         taskRepository.save(task);
 
