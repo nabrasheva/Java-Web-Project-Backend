@@ -74,9 +74,13 @@ public class User implements UserDetails {
   @CreationTimestamp
   private Timestamp createdDate;
 
-    @Column(name = "last_modified_date", nullable = false)
-    @UpdateTimestamp
-    private Timestamp last_modified_date;
+  @Column(name = "last_modified_date", nullable = false)
+  @UpdateTimestamp
+  private Timestamp last_modified_date;
+
+  @Column(name = "isEnabled", nullable = false)
+  private boolean is_enabled;
+
 
     //@Enumerated(EnumType.STRING)
     //private UserAuthRole userAuthRole;
@@ -103,7 +107,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true; //TODO: at first it might be false, because through the email message, the user will verify their email and the account will be enabled and this field will become true
+        return is_enabled;
+        //return true; //TODO: at first it might be false, because through the email message, the user will verify their email and the account will be enabled and this field will become true
     }
 
   @Override

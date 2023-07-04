@@ -35,6 +35,7 @@ public class UserService {
         User foundUser = userRepository.findFirstByEmail(user.getEmail()).orElse(null);
         if(foundUser != null) throw new ObjectNotFoundException("User already exists!");
 
+        user.set_enabled(false);
         userRepository.save(user);
     }
 
@@ -63,8 +64,28 @@ public class UserService {
 
     }
 
-    public void updateUserPassword(User user, String password){
-        user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
+    public boolean verifyEmail(String email){
+        User user = userRepository.findFirstByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Invalid user!"));
+
+        if(!user.isEnabled()){
+            user.set_enabled(true);
+            userRepository.save(user);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean updateUserPassword(String email, String password, String confirmPassword){
+        User user = userRepository.findFirstByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Invalid user!"));
+
+        if(password.equals(confirmPassword)){
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            return true;
+        } else{
+            return false;
+        }
     }
 }

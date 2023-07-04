@@ -22,7 +22,8 @@ CREATE TABLE event_manager.users
     date_of_birth       DATE,
     address             VARCHAR(64),
     created_date        TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
-    last_modified_date  TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE
+    last_modified_date  TIMESTAMP             NOT NULL DEFAULT CURRENT_DATE,
+    is_enabled          BOOLEAN               NOT NULL
 );
 
 
