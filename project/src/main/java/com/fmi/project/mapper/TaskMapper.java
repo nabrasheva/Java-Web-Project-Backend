@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TaskMapper {
 
-    private final EventService eventService;
-    private final UserService userService;
+    //private final EventService eventService;
+   // private final UserService userService;
 
     public TaskDto toDto(Task task){
         return TaskDto.builder()
@@ -41,11 +41,11 @@ public class TaskMapper {
                 .due_date(taskDto.getDueDate())
                 .status(taskDto.getStatus())
                 .creatorEmail(taskDto.getCreatorEmail())
-                .assignees(taskDto.getAssignees().stream()
+                /*.assignees(taskDto.getAssignees().stream()
                                 .map(userService::findUserByEmail)
                                 .flatMap(Optional::stream)
-                                .collect(Collectors.toSet()))
-                .event(eventService.getEventByName(taskDto.getEventName()).orElse(Event.builder().build()))
+                                .collect(Collectors.toSet()))*/
+                //.event(eventService.getEventByName(taskDto.getEventName()).orElse(Event.builder().build()))
                 .build();
     }
 

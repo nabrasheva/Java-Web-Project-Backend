@@ -26,22 +26,14 @@ import static java.util.Objects.nonNull;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final EventService eventService;
     private final EventUserService eventUserService;
     private final UserService userService;
 
-    public List<Task> getAllTasksByEventId(Event event) {
-        return taskRepository.findAllByEvent(event);
-    }
+    public void addTask(final Event event, final Task task) {
+        Task newTask = taskRepository.findFirstByName(task.getName())
+                .orElse(null);
 
-    public Optional<Task> findByTaskId(long taskId) {
-        return taskRepository.findById(taskId);
-    }
-
-    public void addTask(Event event, Task task) {
-        Task newTask = taskRepository.findFirstByName(task.getName()).orElse(null);
-
-        if (event == null || eventService.getEventByName(event.getName()).orElse(null) == null) {
+        if (event == null) {
             throw new ObjectNotFoundException("Invalid event");
         }
 
@@ -52,7 +44,8 @@ public class TaskService {
     }
 
     public void removeTask(Event event, String taskName) {
-        Task task = taskRepository.findFirstByName(taskName).orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
+        Task task = taskRepository.findFirstByName(taskName)
+                .orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
 
         if (task.getEvent().getId().equals(event.getId())) {
             event.getTasks().remove(task);
@@ -70,11 +63,11 @@ public class TaskService {
 
         if (nonNull(status)) task.setStatus(status);
 
-        if (assignees != null && !assignees.isEmpty()){
+        if (assignees != null && !assignees.isEmpty()) {
             Set<User> userSet = assignees.stream().map(email -> {
                 User user = userService.findUserByEmail(email).orElse(null);
                 EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
-                if(nonNull(eventUser)) return user;
+                if (nonNull(eventUser)) return user;
                 else throw new ObjectNotFoundException("User is not part of the event or is not a planner!");
             }).collect(Collectors.toSet());
             task.setAssignees(userSet);
@@ -98,7 +91,8 @@ public class TaskService {
     }
 
     public List<String> getAssigneesByTaskName(String taskName) {
-        Task task = taskRepository.findFirstByName(taskName).orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
+        Task task = taskRepository.findFirstByName(taskName)
+                .orElseThrow(() -> new ObjectNotFoundException("Invalid event"));
 
         return task.getAssignees().stream()
                 .map(User::getEmail)
@@ -110,9 +104,9 @@ public class TaskService {
     }
 
     //........................................................
-    public void addAssigneeForTask(String taskName, String email) {
-        Task task = taskRepository.findFirstByName(taskName).orElse(null);
-        User user = userService.findUserByEmail(email).orElse(null);
+    public void addAssigneeForTask(final String taskName, final String email) {
+        final Task task = taskRepository.findFirstByName(taskName).orElse(null);
+        final User user = userService.findUserByEmail(email).orElse(null);
 
         if (nonNull(task) && nonNull(user)) {
             EventUser eventUser = eventUserService.findFirstByEventAndRoleForAssignee(task.getEvent(), user).orElse(null);
