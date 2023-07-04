@@ -1,5 +1,6 @@
 package com.fmi.project.config;
 
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,6 +33,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/sendPasswordResetEmail").permitAll();
                     auth.requestMatchers("/resetPassword/**").permitAll();
                     auth.requestMatchers("/users/verifyEmail/**").permitAll();
+                    auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**", "/docs/swagger-config", "/docs").permitAll();
                     auth.anyRequest().authenticated(); })
                 //.formLogin(Customizer.withDefaults())
                 .sessionManagement(session -> session
@@ -42,5 +45,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers("/v3/api-docs/**");
+//    }
 
 }
