@@ -52,7 +52,7 @@ public class EventController {
      *   @return    list of all planners or guests for one event
      */
     @GetMapping("event/{eventName}/roles/{role}")
-    public ResponseEntity<Object> getUsersByEventAndRle(@PathVariable String eventName, @PathVariable String role)
+    public ResponseEntity<Object> getUsersByEventAndRole(@PathVariable String eventName, @PathVariable String role)
     {
         Event event = eventService.getEventByName(eventName).orElseThrow(()->new ObjectNotFoundException("No such event!"));
        List<EventUser> eventUsers;
