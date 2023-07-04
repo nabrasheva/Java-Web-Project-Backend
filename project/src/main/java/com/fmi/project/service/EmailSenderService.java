@@ -23,14 +23,13 @@ public class EmailSenderService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-            String token = generateToken();
-
-            String newBody = body.concat(token);
+            //String token = generateToken();
+            //String newBody = body.concat(token);
 
             mimeMessageHelper.setFrom("fn72039@g.fmi.uni-sofia.bg");
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(newBody);
+            mimeMessageHelper.setText(body);
 
             javaMailSender.send(mimeMessage);
 
@@ -39,11 +38,11 @@ public class EmailSenderService {
         }
     }
 
-    private String generateToken(){
-        //LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(30); //the token will be available for 30 min
-
-        //TODO: save the token and the expiry date in the database for the user table
-
-        return UUID.randomUUID().toString();
-    }
+//    private String generateToken(){
+//        //LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(30); //the token will be available for 30 min
+//
+//        //TODO: save the token and the expiry date in the database for the user table
+//
+//        return UUID.randomUUID().toString();
+//    }
 }

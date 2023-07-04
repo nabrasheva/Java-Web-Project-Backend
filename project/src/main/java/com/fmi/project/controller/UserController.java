@@ -70,11 +70,11 @@ public class UserController {
         String jwtToken = jwtService.generateToken(newUser);
 
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Successfully added user");
+        response.put("message", "Successfully added user. In order to use your account, please verify your email");
         response.put("token", jwtToken);
 
         String subject = "Email verification:";
-        String body = "Click here, in order to verify your email: http://localhost:8079/verifyEmail/";
+        String body = "Click here, in order to verify your email: http://localhost:4200/users/verifyEmail/" + newUser.getEmail();
 
         emailSenderService.sendEmail(newUser.getEmail(), subject, body);
 
@@ -82,8 +82,19 @@ public class UserController {
 
     }
 
-    //@PostMapping("/verifyEmail/{token}") ->
-    // TODO trqbva da proverq dali tozi token na kogo prinadleji i dali ne e iztekul: 1)da se sloji kolona v tablicata za User, verifyToken i expiration ili da se naprabvi nova tablica s vunshen kluch kum user-a. Podobno trqbwa da se naprawi i za promqna na parola
+    @PatchMapping("/verifyEmail/{email}")
+    public ResponseEntity<Object> verifyEmail(@PathVariable String email){
+        boolean isVerified = userService.verifyEmail(email);
+        Map<String, String> response = new HashMap<>();
+
+        if(isVerified){
+            response.put("message", "Successfully verified user");
+        } else {
+            response.put("message", "The user is already verified");
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 
