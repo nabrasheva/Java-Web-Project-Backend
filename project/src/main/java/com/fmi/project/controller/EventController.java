@@ -32,14 +32,14 @@ public class EventController {
     private final EventService eventService;
     //private final EventMapper eventMapper;
 
-   // private final TaskService taskService;
+    // private final TaskService taskService;
     //private final TaskMapper taskMapper;
 
-   // private final UserService userService;
+    // private final UserService userService;
 
-  //  private final EventUserService eventUserService;
+    //  private final EventUserService eventUserService;
 
-   // private final EventUserMapper eventUserMapper;
+    // private final EventUserMapper eventUserMapper;
 
     //TODO: @DeleteMapping to remove a user from event eventId
 
@@ -50,9 +50,9 @@ public class EventController {
      * @param role      role of the user
      * @return list of all planners or guests for one event
      */
-    @GetMapping("event/{eventName}/roles/{role}")
-    public ResponseEntity<Object> getUsersByEventAndRole(@PathVariable String eventName,
-                                                         @PathVariable String role) {
+    @GetMapping("/event/{eventName}/roles/{role}")
+    public ResponseEntity<List<EventUserDto>> getUsersByEventAndRole(@PathVariable String eventName,
+                                                                     @PathVariable String role) {
 //        Event event = eventService.getEventByName(eventName).orElseThrow(()->new ObjectNotFoundException("No such event!"));
 //       List<EventUser> eventUsers;
 //        if(Objects.equals(role, "planner"))
