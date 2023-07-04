@@ -74,7 +74,7 @@ public class UserController {
         response.put("token", jwtToken);
 
         String subject = "Email verification:";
-        String body = "Click here, in order to verify your email: http://localhost:8079/users/verifyEmail/" + newUser.getEmail();
+        String body = "Click here, in order to verify your email: http://localhost:4200/users/verifyEmail/" + newUser.getEmail();
 
         emailSenderService.sendEmail(newUser.getEmail(), subject, body);
 
