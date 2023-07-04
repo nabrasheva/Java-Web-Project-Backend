@@ -126,18 +126,19 @@ public class EventService {
 
     public void addEvent(EventDto eventDto, String email) {
         final Event newEvent = eventMapper.toEntity(eventDto);
-        //eventService.addEvent(newEvent, email);
 
         if (newEvent == null) {
             throw new IllegalArgumentException("Incorrect data");
         }
 
         final List<Event> eventList = eventRepository.findAll();
-        final User newEventCreator = userService.findUserByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User do not exist!"));
+        final User newEventCreator = userService.findUserByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("User do not exist!"));
 
         eventList.forEach(event1 -> {
 
-            final EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1).orElseThrow(() ->
+            final EventUser eventUserForCreator = eventUserService.findFirstByEventAndRoleAdmin(event1)
+                    .orElseThrow(() ->
                     new ObjectNotFoundException("EventUser row does not exist!"));
 
             final User eventCreator = eventUserForCreator.getUser();

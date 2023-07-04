@@ -1,11 +1,10 @@
 package com.fmi.project.service;
 
 import com.fmi.project.controller.validation.ObjectNotFoundException;
-import com.fmi.project.dto.EventDto;
-import com.fmi.project.dto.EventUserDto;
-import com.fmi.project.dto.TaskDto;
-import com.fmi.project.dto.UpdateTaskDto;
+import com.fmi.project.dto.*;
+import com.fmi.project.enums.Category;
 import com.fmi.project.enums.Role;
+import com.fmi.project.enums.Status;
 import com.fmi.project.mapper.EventMapper;
 import com.fmi.project.mapper.EventUserMapper;
 import com.fmi.project.mapper.TaskMapper;
@@ -16,6 +15,7 @@ import com.fmi.project.model.User;
 import com.fmi.project.repository.EventRepository;
 import com.fmi.project.repository.UserRepository;
 import net.bytebuddy.asm.Advice;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -222,24 +224,146 @@ class EventServiceTest {
     }
 
     @Test
-    void getTaskByName() {
+    void addEvent_whenNullEvent() {
+        when(eventMapper.toEntity(any())).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            eventService.addEvent(new EventDto(), "test@test.com");
+        });
     }
 
     @Test
-    void getAssigneesByTaskName() {
+    void addEvent_whenNonValidEmail() {
+        when(eventMapper.toEntity(any())).thenReturn(new Event());
+        when(userService.findUserByEmail(anyString())).thenReturn(Optional.empty());
+        when(eventRepository.findAll()).thenReturn(new ArrayList<>());
+
+        assertThrows(ObjectNotFoundException.class, () -> {
+            eventService.addEvent(new EventDto(), "test@test.com");
+        });
+    }
+
+    @Test
+    void addEvent_whenNonExistingEventUser() {
+        when(eventMapper.toEntity(any())).thenReturn(new Event());
+        when(eventUserService.findFirstByEventAndRoleAdmin(any()))
+                .thenReturn(Optional.empty());
+        when(eventRepository.findAll()).thenReturn(List.of(new Event()));
+        when(userService.findUserByEmail(anyString()))
+                .thenReturn(Optional.of(new User()));
+
+        assertThrows(ObjectNotFoundException.class, () -> {
+            eventService.addEvent(new EventDto(), "test@test.com");
+        });
     }
 
     @Test
     void addEvent() {
+        //Given
+        final Event event = new Event();
+        event.setId(1L);
+        event.setName("TEST EVENT");
+        final Event secEvent = new Event();
+        secEvent.setId(2L);
+        secEvent.setName("TEST SECOND EVENT");
+        final User newUser = new User();
+        newUser.setId(5L);
+        final User user = new User();
+        user.setId(1L);
+        final EventUser eventUser = new EventUser();
+        eventUser.setEvent(event);
+        eventUser.setUser(user);
+
+        when(eventMapper.toEntity(any())).thenReturn(event);
+        when(eventRepository.findAll())
+                .thenReturn(List.of(event, secEvent));
+        when(userService.findUserByEmail(anyString()))
+                .thenReturn(Optional.of(newUser));
+        when(eventUserService.findFirstByEventAndRoleAdmin(any()))
+                .thenReturn(Optional.of(eventUser));
+
+        //When
+        eventService.addEvent(new EventDto(), "test@test.com");
+
+        //Then
+        verify(eventRepository).findAll();
+        verify(userService).findUserByEmail(anyString());
+        verify(eventUserService, times(2)).findFirstByEventAndRoleAdmin(any());
+        verify(eventRepository).save(any());
+        verify(eventUserService).addEventUser(any());
     }
 
     @Test
-    void addTask() {
+    void addTask_whenNonValidEventName() {
+        when(eventRepository.findFirstByName(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(ObjectNotFoundException.class, () -> {
+            eventService.addTask("Test Event", new TaskDto());
+        });
     }
 
     @Test
-    void addUserToEvent() {
+    void addTaske() {
+        //Given
+        final Event event = new Event();
+        final Task task = new Task();
+        final User assignee = new User();
+        assignee.setEmail("test@test@com");
+        final TaskDto taskDto = new TaskDto();
+        taskDto.setAssignees(List.of(assignee.getEmail()));
 
+        when(eventRepository.findFirstByName(anyString()))
+                .thenReturn(Optional.of(event));
+        when(taskMapper.toEntity(any()))
+                .thenReturn(task);
+        when(userService.findUserByEmail(any()))
+                .thenReturn(Optional.of(assignee));
+        doNothing().when(taskService).addTask(any(), any());
+
+        //When
+        eventService.addTask("TEST", taskDto);
+
+        //Then
+        verify(eventRepository).findFirstByName(anyString());
+        verify(taskMapper).toEntity(any());
+        verify(userService).findUserByEmail(anyString());
+        verify(taskService).addTask(any(), any());
+    }
+
+    @Test
+    void addUserToEvent_whenNonExistingName() {
+        when(eventRepository.findFirstByName(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(ObjectNotFoundException.class, () -> {
+            eventService.addUserToEvent("Test", new AddUserToEventDto());
+        });
+    }
+
+    @Test
+    void addUserToEvent_whenRoleIsGuest() {
+        final Event event = new Event();
+        event.setEventUsers(new HashSet<>());
+        final AddUserToEventDto addUserToEventDto = new AddUserToEventDto();
+        addUserToEventDto.setRole(Role.GUEST);
+        addUserToEventDto.setCategory(Category.FAMILY);
+        addUserToEventDto.setEmail("test@test.com");
+
+        when(eventRepository.findFirstByName(anyString()))
+                .thenReturn(Optional.of(event));
+        when(userService.findUserByEmail(anyString()))
+                .thenReturn(Optional.of(new User()));
+        when(eventUserService.findFirstByEventAndUser(any(), any()))
+                .thenReturn(Optional.empty());
+
+        //When
+        eventService.addUserToEvent("TEST", addUserToEventDto);
+
+        //Then
+        verify(eventRepository, times(2)).findFirstByName(anyString());
+        verify(userService).findUserByEmail(anyString());
+        verify(eventUserService).findFirstByEventAndUser(any(), any());
+        verify(eventUserService).addEventUser(any());
+        verify(eventRepository).save(any());
     }
 
     @Test
@@ -250,7 +374,6 @@ class EventServiceTest {
             eventService.addAssigneeToTask("Test", "Task", "Test email");
         });
     }
-
 
     @Test
     void addAssigneeToTask() {
@@ -342,15 +465,25 @@ class EventServiceTest {
     @Test
     @Disabled
     void updateTask() {
-//Given
+        //Given
         final Task task = new Task();
         task.setName("TASK");
-        final TaskDto taskDto = new TaskDto();
-        taskDto.setName("TASK");
+        final UpdateTaskDto updateTaskDto = new UpdateTaskDto();
+        updateTaskDto.setDescription("TEST DESC");
+        updateTaskDto.setDueDate(new Date(1990, 12, 12));
+        updateTaskDto.setStatus(Status.DONE);
+        updateTaskDto.setAssignees(new ArrayList<>());
+
+        final TaskDto expectedTaskDto = new TaskDto();
+        expectedTaskDto.setDescription("TEST DESC");
+        expectedTaskDto.setDueDate(new Date(1990, 12, 12));
+        expectedTaskDto.setStatus(Status.DONE);
+        expectedTaskDto.setAssignees(new ArrayList<>());
+
         when(eventRepository.findFirstByName(anyString())).thenReturn(Optional.of(new Event()));
         when(taskService.updateTaskByName(anyString(), anyString(), any(), any(), anyList()))
                 .thenReturn(task);
-        when(taskMapper.toDto(any())).thenReturn(taskDto);
+        when(taskMapper.toDto(any())).thenReturn(expectedTaskDto);
 
         //When
         final TaskDto result = eventService.updateTask("Test", "Task", new UpdateTaskDto());
@@ -359,7 +492,7 @@ class EventServiceTest {
         verify(eventRepository).findFirstByName(any());
         verify(taskService).updateTaskByName(anyString(), anyString(), any(), any(), anyList());
         verify(taskMapper).toDto(any());
-        assertEquals(taskDto, result);
+        assertEquals(expectedTaskDto, result);
     }
 
     @Test
