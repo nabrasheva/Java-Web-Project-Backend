@@ -52,7 +52,7 @@ public class EventController {
      *   @return    list of all planners or guests for one event
      */
     @GetMapping("event/{eventName}/roles/{role}")
-    public ResponseEntity<Object> getUsersByEventAndRole(@PathVariable String eventName, @PathVariable String role)
+    public ResponseEntity<Object> getUsersByEventAndRle(@PathVariable String eventName, @PathVariable String role)
     {
         Event event = eventService.getEventByName(eventName).orElseThrow(()->new ObjectNotFoundException("No such event!"));
        List<EventUser> eventUsers;
@@ -203,9 +203,9 @@ public class EventController {
         Task newTask = taskMapper.toEntity(taskDto);
         taskService.addTask(event, newTask);
 
-//        taskDto.getAssignees().forEach(assigneeEmail->{
-//            taskService.addAssigneeForTask(newTask.getName(),assigneeEmail);
-//        });
+        taskDto.getAssignees().forEach(assigneeEmail->{
+            taskService.addAssigneeForTask(newTask.getName(),assigneeEmail);
+        });
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Successfully added task");
